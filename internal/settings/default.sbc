@@ -1,0 +1,54 @@
+# szbck - Szerszam backup configuration file
+#
+# This file defines the default behavior for snapshot creation,
+# restoration, and retention policies.
+
+# source - The root directory to back up.
+source: /home/user
+
+# target - The default directory where snapshots will be stored. This can be
+# overridden using the -t flag on the command line. If not specified here, the
+# target flag is required on each invocation.
+#target: /mnt/backupDir
+
+# permission - Final file permissions to apply to completed snapshots. May be
+# specified in octal (e.g. 0o500) or symbolic format (e.g. u:rwx;g:rx;o:-).
+# Write access will trigger a safety warning during snapshot creation.
+permission: 0o0500 # u:rx;g:-;o:-
+
+# option - Rsync flags used for snapshot creation and restore. Options are
+# processed in order. This allows precise control of include/exclude behavior.
+#
+# NOTE on verbosity.  If an option impacting rsync's output like --verbose or
+# --debug= or --info== or --quiet then the flags will be used regardless of the
+# application's verbose settings.  If none of these options is given then
+# the applications verbose level will be applied to rsync giving a --verbose
+# or two --verbose flags for one or more -v flags givin to the utility.    
+option: --archive           # Basic backup operation.
+#option: --verbose           # Show all transfers.
+option: --human-readable    # Simplify byte counts.
+option: --acls              # Include access control lists.
+option: --xattrs            # Include extended attributes.
+#option: --crtimes          # Preserve create (newness) times. 
+option: --atimes            # Preserve access (use) times.
+option: --hard-links        # Take extra time to preserve hard links.
+#option: --ignore-times     # Forces checksum-based comparisons.
+#option: --compress         # Use compression.
+option: --fsync             # Perform fsync after each transferred file.
+option: --exclude=.cache    # Exclude all cached files. 
+option: --exclude=go/pkg    # Exclude gp package caches.
+
+# snapshotOption - Additional rsync flags to use during snapshot creation.
+#snapshotOption: --some-option
+#snapshotOption: --another-flag
+
+# restoreOption - Additional rsync flags to use during restores.
+#restoreOption: --one-flag
+#restoreOption: --yet-another
+
+# Retention policy - Specifies how long to keep hourly and daily snapshots.
+# This policy is enforced only when the --trim flag is passed to the snapshot
+# command. Use units like “24 hours” or “30 days”.
+# Weekly snapshots persist unless manually pruned.
+keepHourly: 24 hours
+keepDaily: 30 days

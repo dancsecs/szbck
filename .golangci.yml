@@ -1,0 +1,70 @@
+linters-settings:
+  lll:
+    line-length: 79
+    tab-width: 4
+
+  depguard:
+    rules:
+      "Main":
+        files: _test.go # Only apply to go test files.
+        allow:
+          - $gostd
+    
+  varnamelen:
+      ignore-decls:
+        - i int
+        - mi int
+        - ok bool
+        - id int
+        - db *smkdb.SDB
+        - db *sql.DB
+
+  goconst:
+      ignore-strings: '(?:ID:| \, mod.*)'
+
+linters:
+  enable-all: true
+  disable:
+    #- deadcode # Deprecated
+    #- exhaustivestruct # Deprecated
+    #- golint # Deprecated
+    #- ifshort # Deprecated
+    #- interfacer # Deprecated
+    #- maligned # Deprecated
+    #- nosnakecase # Deprecated
+    #- scopelint # Deprecated
+    #- structcheck # Deprecated
+    #- varcheck # Deprecated
+    # - exportloopref
+    # - goanalysis_metalinter
+    - exportloopref
+    - execinquery
+    - gomnd
+    - goimports
+    - gci
+    - gofmt
+
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  exclude-rules:
+    - path: _test\.go  # Exclude on all test files.
+      linters:
+        - paralleltest
+        # - goconst
+        - dupl
+
+    - path: _internal_test\.go # Exclude on internal test files.
+      linters:
+        - testpackage
+
+    - path: typescript
+      linters:
+        - ts
+
+run:
+  timeout: 5m
+  issues-exit-code: 2
+  go: '1.22'
