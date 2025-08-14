@@ -33,6 +33,18 @@ import (
 
 const initialBackupDirPerm = 0o0700
 
+// NextHourIn returns the time to wait for the start of the next hour.  If
+// elapsed is >= 31 minutes than an extra hour is added to the delay.
+func NextHourIn(elapsed time.Duration) time.Duration {
+	timeToNextTime := time.Hour - elapsed
+
+	for timeToNextTime < time.Minute*31 {
+		timeToNextTime += time.Hour
+	}
+
+	return timeToNextTime
+}
+
 func parseArgs(args []string) (*settings.Config, string, bool, bool, error) {
 	var (
 		cfg       *settings.Config
@@ -99,16 +111,21 @@ func Process(args []string) (string, error) {
 		beforeBytes    int64
 		afterBytes     int64
 		err            error
+		startTime      time.Time
 	)
 
 	cfg, dryRunMsg, trimAfter, daemon, err = parseArgs(args)
+
+	if err == nil {
+		beforeBytes, err = du.Total(cfg.Target.GetPath())
+	}
 
 	runOnce := true
 	sleepBetweenRuns := time.Nanosecond
 
 	for (runOnce || daemon) && err == nil {
 		time.Sleep(sleepBetweenRuns)
-		sleepBetweenRuns = time.Hour
+		startTime = time.Now()
 		runOnce = false
 
 		newDir, err = cfg.Target.Create(time.Now(), initialBackupDirPerm)
@@ -121,19 +138,19 @@ func Process(args []string) (string, error) {
 		}
 
 		if err == nil {
-			beforeBytes, err = du.Total(cfg.Target.GetPath())
-		}
-
-		if err == nil {
 			err = run(dryRunMsg != "", linkDest, newDir, cfg)
 		}
 
-		if err == nil {
+		if err == nil && dryRunMsg == "" {
 			err = os.Chmod(newDir, cfg.Permission)
 		}
 
-		if err == nil {
+		if err == nil && dryRunMsg == "" {
 			err = cfg.Target.SetLatest(newDir)
+		}
+
+		if err == nil && dryRunMsg != "" {
+			err = os.RemoveAll(newDir)
 		}
 
 		if err == nil && trimAfter {
@@ -158,7 +175,11 @@ func Process(args []string) (string, error) {
 				out.Int(afterBytes),
 				out.Int(afterBytes-beforeBytes),
 			)
+
+			beforeBytes = afterBytes
 		}
+
+		sleepBetweenRuns = NextHourIn(time.Since(startTime))
 	}
 
 	if err == nil {

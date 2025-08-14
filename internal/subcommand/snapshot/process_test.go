@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal/rsync"
@@ -92,6 +93,15 @@ func setupBackupConfig(chk *sztest.Chk) (string, string) {
 	)
 
 	return source, cfgFile
+}
+
+func TestSnapshotProcess_NextHourIn(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	defer chk.Release()
+
+	chk.Dur(snapshot.NextHourIn(0), time.Hour)
+	chk.Dur(snapshot.NextHourIn(time.Minute*31), time.Hour+time.Minute*29)
+	chk.Dur(snapshot.NextHourIn(time.Minute*29), time.Minute*31)
 }
 
 func TestSnapshotProcess_MissingArgs(t *testing.T) {
