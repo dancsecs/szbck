@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"github.com/dancsecs/szbck/internal/directory"
+	"github.com/dancsecs/szlog"
 )
 
 // Total returns the total number of bytes used by the directory tree.
@@ -43,6 +44,7 @@ func Total(dir string) (int64, error) {
 	err = directory.Is(dir)
 
 	if err == nil {
+		szlog.Info("Calculating size of dir: (", dir, ")...")
 		tmpStr, err = Run([]string{"-s", "-b", dir}, os.Stderr)
 	}
 
@@ -55,6 +57,8 @@ func Total(dir string) (int64, error) {
 	}
 
 	if err == nil {
+		szlog.Info("... Calculated size of dir: (", dir, ") = ", total)
+
 		return total, nil
 	}
 
