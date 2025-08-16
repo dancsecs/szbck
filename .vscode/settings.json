@@ -52,6 +52,7 @@
         "szlog",
         "sztestlog",
         "sztest",
+        "tenv",
         "testpackage",
         "varcheck",
         "varnamelen",
