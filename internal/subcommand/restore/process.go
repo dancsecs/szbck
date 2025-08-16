@@ -44,7 +44,9 @@ var reFindBackupSubDir = regexp.MustCompile(
 		`\.szb`,
 )
 
-func parseArgs(args []string) (*settings.Config, string, bool, bool, error) {
+func parseArgs(
+	args *szargs.Args,
+) (*settings.Config, string, bool, bool, error) {
 	var (
 		dryRun   bool
 		keep     bool
@@ -53,15 +55,11 @@ func parseArgs(args []string) (*settings.Config, string, bool, bool, error) {
 		err      error
 	)
 
-	dryRun, args, err = szargs.Arg("--dry-run").Is(args)
+	dryRun = args.Is("--dry-run", "")
+	keep = args.Is("--keep", "")
+	snapshot, _ = args.ValueString("-s", "")
 
-	if err == nil {
-		keep, args, err = szargs.Arg("--keep").Is(args)
-	}
-
-	if err == nil {
-		snapshot, _, args, err = szargs.Arg("-s").Value(args)
-	}
+	err = args.Err()
 
 	if err == nil {
 		cfg, err = settings.LoadFromArgs(args)
@@ -123,7 +121,7 @@ func MakeDirs(srcPath, toPath string) (string, string, error) {
 }
 
 // Process parses the remaining arguments restoring from a szbackup snapshot.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		cfg         *settings.Config
 		dryRun      bool

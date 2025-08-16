@@ -108,7 +108,8 @@ func TestSnapshotProcess_MissingArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := snapshot.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	outText, err := snapshot.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -128,7 +129,8 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 	source, cfgFile := setupBackupConfig(chk)
 	trg := chk.CreateTmpSubDir("target")
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -155,7 +157,11 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 
 	_ = chk.CreateTmpFileIn(source, []byte("file"))
 
-	outText, err := snapshot.Process([]string{"--dry-run", "-t", trg, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "--dry-run", "-t", trg, cfgFile},
+	)
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -182,11 +188,13 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 
 	_ = chk.CreateTmpFileIn(source, []byte("file"))
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	outText, err = snapshot.Process([]string{"-t", trg, cfgFile})
+	args = szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err = snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -221,13 +229,15 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 
 	_ = chk.CreateTmpFileIn(source, []byte("file1"))
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
 	_ = chk.CreateTmpFileIn(source, []byte("file1"))
 
-	outText, err = snapshot.Process([]string{"-t", trg, cfgFile})
+	args = szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err = snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -260,7 +270,11 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	source, cfgFile := setupBackupConfig(chk)
 	trg := chk.CreateTmpSubDir("target")
 
-	outText, err := snapshot.Process([]string{"--trim", "-t", trg, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "--trim", "-t", trg, cfgFile},
+	)
+	outText, err := snapshot.Process(args)
 
 	chk.Err(
 		err,

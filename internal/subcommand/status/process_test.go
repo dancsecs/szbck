@@ -109,7 +109,8 @@ func TestStatus_Process_NoArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := status.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	outText, err := status.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -128,7 +129,8 @@ func TestStatus_Process_InvalidConfigFileDir(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 
-	outText, err := status.Process([]string{dir})
+	args := szargs.New("", []string{"prg", dir})
+	outText, err := status.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -148,7 +150,8 @@ func TestStatus_Process_BlankBackupDir(t *testing.T) {
 
 	cfgFile := setupBackupConfig(chk)
 
-	outText, err := status.Process([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	outText, err := status.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -167,7 +170,8 @@ func TestStatus_Process_InvalidBackupDir(t *testing.T) {
 	dir := chk.CreateTmpDir()
 	cfgFile := setupBackupConfig(chk)
 
-	outText, err := status.Process([]string{"-t", dir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", dir, cfgFile})
+	outText, err := status.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -201,7 +205,8 @@ func TestStatus_Process_InvalidBackupDirContent(t *testing.T) {
 		nil,
 	)
 
-	outText, err := status.Process([]string{"-t", dir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", dir, cfgFile})
+	outText, err := status.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -226,7 +231,8 @@ func TestStatus_Process_EmptyBackupDir(t *testing.T) {
 	cfgFile := setupBackupConfig(chk)
 	trgDir := chk.CreateTmpSubDir("target")
 
-	outText, err := status.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := status.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -249,7 +255,8 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 
 	bkDir := makeSnapshotDir(chk, trgDir, 0)
 
-	outText, err := status.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := status.Process(args)
 	chk.NoErr(err)
 	chk.StrSlice(
 		strings.Split(outText, "\n"),
@@ -277,7 +284,8 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 
 	_ = chk.CreateTmpFileIn(bkDir2, []byte("This is a file in dir 2"))
 
-	outText, err := status.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := status.Process(args)
 	chk.NoErr(err)
 	chk.StrSlice(
 		strings.Split(outText, "\n"),

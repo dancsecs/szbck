@@ -36,7 +36,8 @@ func TestCreate_Process_NoArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := create.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	outText, err := create.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -53,7 +54,8 @@ func TestCreate_Process_InvalidSourceDirectory(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := create.Process([]string{"/INVALID_source"})
+	args := szargs.New("", []string{"prg", "/INVALID_source"})
+	outText, err := create.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -75,9 +77,9 @@ func TestCreate_Process_OutFileExists(t *testing.T) {
 	source := chk.CreateTmpDir()
 	outFile := chk.CreateTmpFile(nil)
 
-	outText, err := create.Process(
-		[]string{"-o", outFile, source},
-	)
+	args := szargs.New("", []string{"prg", "-o", outFile, source})
+	outText, err := create.Process(args)
+
 	chk.Err(
 		err,
 		""+
@@ -96,7 +98,8 @@ func TestCreate_Process_Valid_Stdout(t *testing.T) {
 
 	source := chk.CreateTmpSubDir("source")
 
-	outText, err := create.Process([]string{source})
+	args := szargs.New("", []string{"prg", source})
+	outText, err := create.Process(args)
 	chk.NoErr(err)
 
 	chkCfgText := strings.Replace(
@@ -120,9 +123,8 @@ func TestCreate_Process_Valid_OutFile(t *testing.T) {
 	source := chk.CreateTmpSubDir("source")
 	toFile := filepath.Join(dir, "file.sbc")
 
-	outText, err := create.Process(
-		[]string{"-o", toFile, source},
-	)
+	args := szargs.New("", []string{"prg", "-o", toFile, source})
+	outText, err := create.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(

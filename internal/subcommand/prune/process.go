@@ -34,7 +34,9 @@ import (
 
 const permToDelete = 0o0700
 
-func parseArguments(args []string) (*settings.Config, string, string, error) {
+func parseArguments(
+	args *szargs.Args,
+) (*settings.Config, string, string, error) {
 	var (
 		isDryRun bool
 		dryRun   string
@@ -44,19 +46,17 @@ func parseArguments(args []string) (*settings.Config, string, string, error) {
 		err      error
 	)
 
-	isDryRun, args, err = szargs.Arg("--dry-run").Is(args)
-	if err == nil {
-		if isDryRun {
-			dryRun = " (DRY RUN)"
-		}
+	isDryRun = args.Is("--dry-run", "")
+	if isDryRun {
+		dryRun = " (DRY RUN)"
 	}
 
-	if err == nil {
-		numToDel, found, args, err = szargs.Arg("-n").Value(args)
-		if err == nil && !found {
-			numToDel = "1"
-		}
+	numToDel, found = args.ValueString("-n", "")
+	if !found {
+		numToDel = "1"
 	}
+
+	err = args.Err()
 
 	if err == nil {
 		cfg, err = settings.LoadFromArgs(args)
@@ -133,7 +133,7 @@ func pruneDirectories(num int, dirs []string, dryRun string) error {
 }
 
 // Process parses the remaining arguments deleting previous backups.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		rawNumToDel  string
 		dryRun       string
@@ -152,14 +152,14 @@ func Process(args []string) (string, error) {
 	}
 
 	if err == nil {
-		beforeBytes, err = du.Total(cfg.Target.GetPath())
-	}
-
-	if err == nil {
 		numToDel, err = validateNumberToDelete(
 			rawNumToDel,
 			len(matchingDirs),
 		)
+	}
+
+	if err == nil {
+		beforeBytes, err = du.Total(cfg.Target.GetPath())
 	}
 
 	if err == nil {

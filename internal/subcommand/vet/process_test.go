@@ -79,7 +79,8 @@ func TestVet_Process_NoArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := vet.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	outText, err := vet.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -98,7 +99,8 @@ func TestVet_Process_SourceError(t *testing.T) {
 
 	cfgFile := setupBackupConfig(chk, true)
 
-	outText, err := vet.Process([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	outText, err := vet.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -126,7 +128,8 @@ func TestVet_Process_Valid(t *testing.T) {
 
 	cfgFile := setupBackupConfig(chk, false)
 
-	outText, err := vet.Process([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	outText, err := vet.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "vet successful (no problems found)\n")
 }

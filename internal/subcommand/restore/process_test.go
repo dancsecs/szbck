@@ -155,7 +155,8 @@ func TestRestoreProcess_noArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	textOut, err := restore.Process((nil))
+	args := szargs.New("", []string{"prg"})
+	textOut, err := restore.Process(args)
 
 	chk.Err(
 		err,
@@ -177,10 +178,8 @@ func TestRestoreProcess_InvalidSpecificDirectory(t *testing.T) {
 	_, cfgFile := setupBackupConfig(chk)
 	trg := chk.CreateTmpSubDir("target")
 
-	textOut, err := restore.Process([]string{
-		"-s", ".", "-t", trg, cfgFile,
-	},
-	)
+	args := szargs.New("", []string{"prg", "-s", ".", "-t", trg, cfgFile})
+	textOut, err := restore.Process(args)
 
 	chk.Err(
 		err,
@@ -195,6 +194,7 @@ func TestRestoreProcess_InvalidSpecificDirectory(t *testing.T) {
 	chk.Str(textOut, "")
 }
 
+//nolint:funlen // Ok.
 func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
 	defer chk.Release()
@@ -205,24 +205,31 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 
 	file := chk.CreateTmpFileIn(source, []byte("file1"))
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	outText, err = restore.Process([]string{"-t", trg, cfgFile})
+	args = szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
 
 	chk.NoErr(os.Remove(file))
 
-	outText, err = restore.Process([]string{
-		"-s",
-		target.LatestDirectoryLink,
-		"-t",
-		trg,
-		cfgFile,
-	})
+	args = szargs.New(
+		"",
+		[]string{
+			"prg",
+			"-s",
+			target.LatestDirectoryLink,
+			"-t",
+			trg,
+			cfgFile,
+		},
+	)
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
@@ -264,18 +271,21 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 
 	file := chk.CreateTmpFileIn(source, []byte("file1"))
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	outText, err = restore.Process([]string{"-t", trg, cfgFile})
+	args = szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
 
 	chk.NoErr(os.Remove(file))
 
-	outText, err = restore.Process([]string{"-t", trg, cfgFile})
+	args = szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
@@ -317,21 +327,21 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 
 	file := chk.CreateTmpFileIn(source, []byte("file1"))
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	outText, err = restore.Process(
-		[]string{"--dry-run", "-t", trg, cfgFile},
-	)
+	args = szargs.New("", []string{"prg", "--dry-run", "-t", trg, cfgFile})
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
 
 	chk.NoErr(os.Remove(file))
 
-	outText, err = restore.Process(
-		[]string{"--keep", "-t", trg, cfgFile})
+	args = szargs.New("", []string{"prg", "--keep", "-t", trg, cfgFile})
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
@@ -381,11 +391,15 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 
 	fileSub2 := chk.CreateTmpFileIn(srcSubDir2, []byte("fileSub2"))
 
-	outText, err := snapshot.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := snapshot.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
-	outText, err = restore.Process(
+
+	args = szargs.New(
+		"",
 		[]string{
+			"prg",
 			"-s",
 			filepath.Join(target.LatestDirectoryLink, "source", "subDir2"),
 			"-t",
@@ -393,6 +407,7 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 			cfgFile,
 		},
 	)
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
@@ -400,8 +415,10 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 	chk.NoErr(os.Remove(fileSub1))
 	chk.NoErr(os.Remove(fileSub2))
 
-	outText, err = restore.Process(
+	args = szargs.New(
+		"",
 		[]string{
+			"prg",
 			"-s",
 			filepath.Join(target.LatestDirectoryLink, "source", "subDir2"),
 			"-t",
@@ -409,6 +426,7 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 			cfgFile,
 		},
 	)
+	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")

@@ -151,7 +151,8 @@ func TestTrim_Process_NoArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := trim.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	outText, err := trim.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -170,7 +171,8 @@ func TestTrim_Process_BlankBackupDir(t *testing.T) {
 
 	cfgFile := setupBackupConfig(chk)
 
-	outText, err := trim.Process([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	outText, err := trim.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -189,7 +191,8 @@ func TestTrim_Process_EmptyBackupDir(t *testing.T) {
 	cfgFile := setupBackupConfig(chk)
 	trg := chk.CreateTmpSubDir("target")
 
-	outText, err := trim.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := trim.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -213,7 +216,8 @@ func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
 
 	_ = makeSnapshotDir(chk, trgDir, startTime)
 
-	outText, err := trim.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := trim.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -247,7 +251,8 @@ func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
 		),
 	)
 
-	outText, err := trim.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := trim.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -274,7 +279,11 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	snap1 := makeSnapshotDir(chk, trgDir, tme) // Thirty minutes ago.
 	snap2 := makeSnapshotDir(chk, trgDir, startTime)
 
-	outText, err := trim.Process([]string{"--dry-run", "-t", trgDir, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "--dry-run", "-t", trgDir, cfgFile},
+	)
+	outText, err := trim.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -302,7 +311,11 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 	snap1 := makeSnapshotDir(chk, trgDir, tme) // Last Year.
 	snap2 := makeSnapshotDir(chk, trgDir, startTime)
 
-	outText, err := trim.Process([]string{"--dry-run", "-t", trgDir, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "--dry-run", "-t", trgDir, cfgFile},
+	)
+	outText, err := trim.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -330,7 +343,8 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 	snap1 := makeSnapshotDir(chk, trgDir, tme) // Last Year.
 	snap2 := makeSnapshotDir(chk, trgDir, startTime)
 
-	outText, err := trim.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := trim.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -364,7 +378,8 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 
 	keepRoot := makeSnapshotDir(chk, trgDir, startTime)
 
-	outText, err := trim.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := trim.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 

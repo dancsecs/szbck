@@ -25,13 +25,15 @@ import (
 	"github.com/dancsecs/szbck/internal/settings"
 )
 
-func parseArguments(args []string) error {
+func parseArguments(args *szargs.Args) error {
 	var (
 		configFileName string
 		err            error
 	)
 
-	configFileName, err = szargs.Last("backup config filename", args)
+	configFileName = args.NextString("backup config filename", "")
+	args.Done()
+	err = args.Err()
 
 	if err == nil {
 		_, err = settings.Load(configFileName)
@@ -41,7 +43,7 @@ func parseArguments(args []string) error {
 }
 
 // Process parses the remaining arguments deleting previous backups.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	err := parseArguments(args)
 
 	if err == nil {

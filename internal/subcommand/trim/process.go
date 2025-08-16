@@ -34,7 +34,7 @@ import (
 
 const permToDelete = 0o0700
 
-func parseArguments(args []string) (*settings.Config, string, error) {
+func parseArguments(args *szargs.Args) (*settings.Config, string, error) {
 	var (
 		isDryRun bool
 		dryRun   string
@@ -42,12 +42,12 @@ func parseArguments(args []string) (*settings.Config, string, error) {
 		err      error
 	)
 
-	isDryRun, args, err = szargs.Arg("--dry-run").Is(args)
-	if err == nil {
-		if isDryRun {
-			dryRun = " (DRY RUN)"
-		}
+	isDryRun = args.Is("--dry-run", "")
+	if isDryRun {
+		dryRun = " (DRY RUN)"
 	}
+
+	err = args.Err()
 
 	if err == nil {
 		cfg, err = settings.LoadFromArgs(args)
@@ -144,7 +144,7 @@ func PurgeSnapshots(
 }
 
 // Process parses the remaining arguments deleting previous backups.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		dryRun      string
 		cfg         *settings.Config

@@ -22,6 +22,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal/subcommand/create"
 	"github.com/dancsecs/szbck/internal/subcommand/help"
 	"github.com/dancsecs/szbck/internal/subcommand/prune"
@@ -38,7 +39,8 @@ func TestHelpProcess_UnknownSubcommand(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"unknown"})
+	args := szargs.New("", []string{"prg", "unknown"})
+	helpText, err := help.Process(args)
 
 	chk.Str(helpText, "")
 
@@ -57,7 +59,8 @@ func TestHelpProcess_NoSubcommand(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	wantTxt := strings.Split(help.Usage, "\n")
@@ -80,7 +83,8 @@ func TestHelpProcess_All(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"ALL"})
+	args := szargs.New("", []string{"prg", "ALL"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	wantTxt := strings.Split(help.Usage, "\n")
@@ -103,7 +107,8 @@ func TestHelpProcess_Help(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"H"})
+	args := szargs.New("", []string{"prg", "H"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -111,7 +116,8 @@ func TestHelpProcess_Help(t *testing.T) {
 		strings.Split(help.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"HELP"})
+	args = szargs.New("", []string{"prg", "HELP"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -124,7 +130,8 @@ func TestHelpProcess_Initialize(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"I"})
+	args := szargs.New("", []string{"prg", "I"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -132,7 +139,8 @@ func TestHelpProcess_Initialize(t *testing.T) {
 		strings.Split(create.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"INIT"})
+	args = szargs.New("", []string{"prg", "INIT"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -140,7 +148,8 @@ func TestHelpProcess_Initialize(t *testing.T) {
 		strings.Split(create.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"INITIALIZE"})
+	args = szargs.New("", []string{"prg", "INITIALIZE"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -153,7 +162,8 @@ func TestHelpProcess_Snapshot(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"S"})
+	args := szargs.New("", []string{"prg", "S"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -161,7 +171,8 @@ func TestHelpProcess_Snapshot(t *testing.T) {
 		strings.Split(snapshot.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"SNAP"})
+	args = szargs.New("", []string{"prg", "SNAP"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -169,7 +180,8 @@ func TestHelpProcess_Snapshot(t *testing.T) {
 		strings.Split(snapshot.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"SNAPSHOT"})
+	args = szargs.New("", []string{"prg", "SNAPSHOT"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -182,7 +194,8 @@ func TestHelpProcess_Restore(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"R"})
+	args := szargs.New("", []string{"prg", "R"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -190,7 +203,8 @@ func TestHelpProcess_Restore(t *testing.T) {
 		strings.Split(restore.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"RES"})
+	args = szargs.New("", []string{"prg", "RES"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -198,7 +212,8 @@ func TestHelpProcess_Restore(t *testing.T) {
 		strings.Split(restore.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"RESTORE"})
+	args = szargs.New("", []string{"prg", "RESTORE"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -211,7 +226,8 @@ func TestHelpProcess_Prune(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"P"})
+	args := szargs.New("", []string{"prg", "P"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -219,7 +235,8 @@ func TestHelpProcess_Prune(t *testing.T) {
 		strings.Split(prune.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"PRUNE"})
+	args = szargs.New("", []string{"prg", "PRUNE"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -232,7 +249,8 @@ func TestHelpProcess_Status(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"STAT"})
+	args := szargs.New("", []string{"prg", "STAT"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -240,7 +258,8 @@ func TestHelpProcess_Status(t *testing.T) {
 		strings.Split(status.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"STATUS"})
+	args = szargs.New("", []string{"prg", "STATUS"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -253,7 +272,8 @@ func TestHelpProcess_Trim(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"T"})
+	args := szargs.New("", []string{"prg", "T"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -261,7 +281,8 @@ func TestHelpProcess_Trim(t *testing.T) {
 		strings.Split(trim.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"TRIM"})
+	args = szargs.New("", []string{"prg", "TRIM"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -274,7 +295,8 @@ func TestHelpProcess_Vet(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	helpText, err := help.Process([]string{"V"})
+	args := szargs.New("", []string{"prg", "V"})
+	helpText, err := help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(
@@ -282,7 +304,8 @@ func TestHelpProcess_Vet(t *testing.T) {
 		strings.Split(vet.HelpText, "\n"),
 	)
 
-	helpText, err = help.Process([]string{"VET"})
+	args = szargs.New("", []string{"prg", "VET"})
+	helpText, err = help.Process(args)
 	chk.NoErr(err)
 
 	chk.StrSlice(

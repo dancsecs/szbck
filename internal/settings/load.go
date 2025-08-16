@@ -57,7 +57,7 @@ func Load(fPath string) (*Config, error) {
 // argument with the backup target optionally overridden by a "-t" filename
 // argument. An error if the replacement is invalid or if both the replacement
 // and the configured target are not defined.
-func LoadFromArgs(args []string) (*Config, error) {
+func LoadFromArgs(args *szargs.Args) (*Config, error) {
 	var (
 		trgOverride string
 		cfgFilename string
@@ -65,11 +65,10 @@ func LoadFromArgs(args []string) (*Config, error) {
 		err         error
 	)
 
-	trgOverride, _, args, err = szargs.Arg("-t").Value(args)
-
-	if err == nil {
-		cfgFilename, err = szargs.Last("backup config filename", args)
-	}
+	trgOverride, _ = args.ValueString("-t", "")
+	cfgFilename = args.NextString("backup config filename", "")
+	args.Done()
+	err = args.Err()
 
 	if err == nil {
 		cfg, err = Load(cfgFilename)

@@ -41,18 +41,14 @@ func TestBackupMain_MissingSubCommand(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	chk.Int(
-		internal.Main("programName", nil),
-		1,
-	)
+	args := szargs.New("", []string{"programName"})
 
 	chk.Int(
-		internal.Main("programName", []string{}),
+		internal.Main(args),
 		1,
 	)
 
 	chk.Log(
-		"F:programName - missing argument: sub command",
 		"F:programName - missing argument: sub command",
 	)
 }
@@ -61,8 +57,10 @@ func TestBackupMain_UnknownSubCommand(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "UnknownSubCommand"})
+
 	chk.Int(
-		internal.Main("programName", []string{"UnknownSubCommand"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -77,10 +75,13 @@ func TestBackupMain_Verbose(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelFatal)
 	defer chk.Release()
 
+	args := szargs.New(
+		"",
+		[]string{"programName", "-v", "-v", "-vv", "UnknownSubCommand"},
+	)
+
 	chk.Int(
-		internal.Main(
-			"programName", []string{"-v", "-v", "-vv", "UnknownSubCommand"},
-		),
+		internal.Main(args),
 		1,
 	)
 
@@ -100,8 +101,10 @@ func TestBackupMain_Help(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "h"})
+
 	chk.Int(
-		internal.Main("programName", []string{"h"}),
+		internal.Main(args),
 		0,
 	)
 
@@ -125,8 +128,10 @@ func TestBackupMain_Create(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "c"})
+
 	chk.Int(
-		internal.Main("programName", []string{"c"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -144,8 +149,10 @@ func TestBackupMain_Snapshot(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "s"})
+
 	chk.Int(
-		internal.Main("programName", []string{"s"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -164,8 +171,10 @@ func TestBackupMain_Restore(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "r"})
+
 	chk.Int(
-		internal.Main("programName", []string{"r"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -184,8 +193,10 @@ func TestBackupMain_Prune(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "p"})
+
 	chk.Int(
-		internal.Main("programName", []string{"p"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -204,8 +215,10 @@ func TestBackupMain_Status(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "stat"})
+
 	chk.Int(
-		internal.Main("programName", []string{"stat"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -224,8 +237,10 @@ func TestBackupMain_Trim(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "trim"})
+
 	chk.Int(
-		internal.Main("programName", []string{"trim"}),
+		internal.Main(args),
 		1,
 	)
 
@@ -244,8 +259,10 @@ func TestBackupMain_Vet(t *testing.T) {
 	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
+	args := szargs.New("", []string{"programName", "vet"})
+
 	chk.Int(
-		internal.Main("programName", []string{"vet"}),
+		internal.Main(args),
 		1,
 	)
 

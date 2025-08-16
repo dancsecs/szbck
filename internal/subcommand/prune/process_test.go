@@ -108,7 +108,8 @@ func TestPrune_Process_NoArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	outText, err := prune.Process(nil)
+	args := szargs.New("", []string{"prg"})
+	outText, err := prune.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -127,7 +128,8 @@ func TestPrune_Process_BlankBackupDir(t *testing.T) {
 
 	cfgFile := setupBackupConfig(chk)
 
-	outText, err := prune.Process([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	outText, err := prune.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -146,7 +148,8 @@ func TestPrune_Process_EmptyBackupDir(t *testing.T) {
 	cfgFile := setupBackupConfig(chk)
 	trg := chk.CreateTmpSubDir("target")
 
-	outText, err := prune.Process([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	outText, err := prune.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -167,7 +170,8 @@ func TestPrune_Process_OnlyOneBackupDir(t *testing.T) {
 
 	_ = makeSnapshotDir(chk, trgDir, 0)
 
-	outText, err := prune.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := prune.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -189,7 +193,11 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	dirToDelete := makeSnapshotDir(chk, trgDir, 0)
 	_ = makeSnapshotDir(chk, trgDir, 30)
 
-	outText, err := prune.Process([]string{"--dry-run", "-t", trgDir, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "--dry-run", "-t", trgDir, cfgFile},
+	)
+	outText, err := prune.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -214,7 +222,8 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 	dirToDelete := makeSnapshotDir(chk, trgDir, 0)
 	_ = makeSnapshotDir(chk, trgDir, 30)
 
-	outText, err := prune.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := prune.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -239,7 +248,8 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 	_ = makeSnapshotDir(chk, trgDir, 30)
 	_ = makeSnapshotDir(chk, trgDir, 60)
 
-	outText, err := prune.Process([]string{"-t", trgDir, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
+	outText, err := prune.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -265,7 +275,11 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 	dirToDelete2 := makeSnapshotDir(chk, trgDir, 30)
 	_ = makeSnapshotDir(chk, trgDir, 60)
 
-	outText, err := prune.Process([]string{"-n", "all", "-t", trgDir, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "-n", "all", "-t", trgDir, cfgFile},
+	)
+	outText, err := prune.Process(args)
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
@@ -291,7 +305,11 @@ func TestPrune_Process_TwoBackupDirs_InvalidNum(t *testing.T) {
 	_ = makeSnapshotDir(chk, trgDir, 0)
 	_ = makeSnapshotDir(chk, trgDir, 30)
 
-	outText, err := prune.Process([]string{"-n", "-1", "-t", trgDir, cfgFile})
+	args := szargs.New(
+		"",
+		[]string{"prg", "-n", "-1", "-t", trgDir, cfgFile},
+	)
+	outText, err := prune.Process(args)
 	chk.Err(
 		err,
 		""+
@@ -319,9 +337,12 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 	dirToDelete2 := makeSnapshotDir(chk, trgDir, 30)
 	_ = makeSnapshotDir(chk, trgDir, 60)
 
-	outText, err := prune.Process(
-		[]string{"-n", "1000", "-t", trgDir, cfgFile},
+	args := szargs.New(
+		"",
+		[]string{"prg", "-n", "1000", "-t", trgDir, cfgFile},
 	)
+	outText, err := prune.Process(args)
+
 	chk.NoErr(err)
 	chk.Str(outText, "")
 

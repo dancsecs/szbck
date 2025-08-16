@@ -34,17 +34,15 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-func parseGlobalArgs(args []string) (string, []string, error) {
+func parseGlobalArgs(args *szargs.Args) string {
 	var (
 		verbose       int
 		doubleVerbose int
 		subCommand    string
-		err           error
 	)
 
-	verbose, args = szargs.Arg("-v").Count(args)
-
-	doubleVerbose, args = szargs.Arg("-vv").Count(args)
+	verbose = args.Count("-v", "")
+	doubleVerbose = args.Count("-vv", "")
 
 	verbose += doubleVerbose + doubleVerbose
 
@@ -54,20 +52,16 @@ func parseGlobalArgs(args []string) (string, []string, error) {
 		szlog.IncLevel()
 	}
 
-	subCommand, args, err = szargs.Next("sub command", args)
+	subCommand = args.NextString("sub command", "")
 
-	if err == nil {
-		return subCommand, args, nil
-	}
-
-	return "", nil, err //nolint:wrapcheck // Ok.
+	return subCommand
 }
 
 // Main is the actual mainline for the puzzle application classically returning
 // an int to be returned when exiting.
 //
 //nolint:cyclop   // Ok.
-func Main(programName string, args []string) int {
+func Main(args *szargs.Args) int {
 	var (
 		subCommand  string
 		outText     string
@@ -75,13 +69,15 @@ func Main(programName string, args []string) int {
 		returnValue int
 	)
 
-	subCommand, args, err = parseGlobalArgs(args)
+	subCommand = parseGlobalArgs(args)
+
+	err = args.Err()
 	if err == nil {
 		switch strings.ToLower(subCommand) {
 		case "h", "help":
 			outText, err = help.Process(args)
 			if err == nil {
-				outText = programName + "\n" + outText
+				outText = args.ProgramName() + "\n" + outText
 			}
 		case "c", "create":
 			outText, err = create.Process(args)
@@ -107,7 +103,7 @@ func Main(programName string, args []string) int {
 	}
 
 	if err != nil {
-		szlog.Fatalf("%s - %v\n", programName, err)
+		szlog.Fatalf("%s - %v\n", args.ProgramName(), err)
 
 		returnValue = 1
 	}

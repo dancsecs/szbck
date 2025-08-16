@@ -23,13 +23,14 @@ import (
 	"path/filepath"
 	"slices"
 
+	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal/du"
 	"github.com/dancsecs/szbck/internal/out"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/target"
 )
 
-func parseArguments(args []string) (*settings.Config, error) {
+func parseArguments(args *szargs.Args) (*settings.Config, error) {
 	var (
 		cfg *settings.Config
 		err error
@@ -100,7 +101,7 @@ func buildReport(trg string) (string, error) {
 }
 
 // Process parses the remaining arguments deleting previous backups.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		cfg    *settings.Config
 		report string

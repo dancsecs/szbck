@@ -19,7 +19,6 @@
 package help
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -36,18 +35,20 @@ import (
 // Process parses the remaining arguments deleting previous backups.
 //
 //nolint:cyclop  // Ok.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		subCommand string
 		err        error
 	)
 
-	subCommand, err = szargs.Last("sub command", args)
-
-	if errors.Is(err, szargs.ErrMissing) {
-		err = nil
+	if args.HasNext() {
+		subCommand = args.NextString("sub command", "")
+	} else {
 		subCommand = "all"
 	}
+
+	args.Done()
+	err = args.Err()
 
 	if err == nil {
 		switch strings.ToLower(subCommand) {

@@ -45,7 +45,9 @@ func NextHourIn(elapsed time.Duration) time.Duration {
 	return timeToNextTime
 }
 
-func parseArgs(args []string) (*settings.Config, string, bool, bool, error) {
+func parseArgs(
+	args *szargs.Args,
+) (*settings.Config, string, bool, bool, error) {
 	var (
 		cfg       *settings.Config
 		isDryRun  bool
@@ -55,19 +57,14 @@ func parseArgs(args []string) (*settings.Config, string, bool, bool, error) {
 		err       error
 	)
 
-	isDryRun, args, err = szargs.Arg("--dry-run").Is(args)
-
-	if err == nil && isDryRun {
+	isDryRun = args.Is("--dry-run", "")
+	if isDryRun {
 		dryRun = " (DRY RUN)"
 	}
 
-	if err == nil {
-		trimAfter, args, err = szargs.Arg("--trim").Is(args)
-	}
-
-	if err == nil {
-		daemon, args, err = szargs.Arg("--daemon").Is(args)
-	}
+	trimAfter = args.Is("--trim", "")
+	daemon = args.Is("--daemon", "")
+	err = args.Err()
 
 	if err == nil {
 		cfg, err = settings.LoadFromArgs(args)
@@ -95,7 +92,7 @@ func run(dryRun bool, linkDest, newDir string, cfg *settings.Config) error {
 // Process parses the remaining arguments creating a szbackup snapshot.
 //
 //nolint:cyclop,funlen // Ok.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		cfg            *settings.Config
 		dryRunMsg      string

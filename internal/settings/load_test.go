@@ -83,7 +83,8 @@ func TestConfigBackup_LoadFromArgs_NoArgs(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
 	defer chk.Release()
 
-	cfg, err := settings.LoadFromArgs(nil)
+	args := szargs.New("", []string{"prg"})
+	cfg, err := settings.LoadFromArgs(args)
 	chk.Err(
 		err,
 		""+
@@ -105,7 +106,8 @@ func TestConfigBackup_LoadFromArgs_NoneDefined(t *testing.T) {
 
 	cfgFile := chk.CreateTmpFileAs("", "sample.sbc", []byte(cfgData))
 
-	cfg, err := settings.LoadFromArgs([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	cfg, err := settings.LoadFromArgs(args)
 	chk.Err(
 		err,
 		""+
@@ -127,7 +129,8 @@ func TestConfigBackup_LoadFromArgs_NoDefaultOverrideOnly(t *testing.T) {
 
 	cfgFile := chk.CreateTmpFileAs("", "sample.sbc", []byte(cfgData))
 
-	cfg, err := settings.LoadFromArgs([]string{"-t", trg, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg, cfgFile})
+	cfg, err := settings.LoadFromArgs(args)
 	chk.NoErr(err)
 	chk.Str(cfg.Target.GetPath(), trg)
 }
@@ -144,7 +147,8 @@ func TestConfigBackup_LoadFromArgs_DefaultNoOverride(t *testing.T) {
 
 	cfgFile := chk.CreateTmpFileAs("", "sample.sbc", []byte(cfgData))
 
-	cfg, err := settings.LoadFromArgs([]string{cfgFile})
+	args := szargs.New("", []string{"prg", cfgFile})
+	cfg, err := settings.LoadFromArgs(args)
 	chk.NoErr(err)
 	chk.Str(cfg.Target.GetPath(), trg)
 }
@@ -162,7 +166,8 @@ func TestConfigBackup_LoadFromArgs_DefaultAndOverride(t *testing.T) {
 
 	cfgFile := chk.CreateTmpFileAs("", "sample.sbc", []byte(cfgData))
 
-	cfg, err := settings.LoadFromArgs([]string{"-t", trg2, cfgFile})
+	args := szargs.New("", []string{"prg", "-t", trg2, cfgFile})
+	cfg, err := settings.LoadFromArgs(args)
 
 	chk.NoErr(err)
 	chk.Str(cfg.Target.GetPath(), trg2)

@@ -83,8 +83,8 @@ package main
 
 import (
 	"os"
-	"path/filepath"
 
+	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal"
 )
 
@@ -95,14 +95,9 @@ function which cannot be tested.  Therefore this wrapper is the only function
 in this utility that is not tested.
 */
 func main() {
-	programName := filepath.Base(os.Args[0])
-	args := []string(nil)
+	args := szargs.New("", os.Args)
 
-	if len(os.Args) > 1 {
-		args = os.Args[1:]
-	}
-
-	returnValue := internal.Main(programName, args)
+	returnValue := internal.Main(args)
 
 	os.Exit(returnValue)
 }

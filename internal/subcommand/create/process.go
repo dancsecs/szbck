@@ -45,25 +45,19 @@ import (
 // 	return ""
 // }
 
-func parseArgs(args []string) (string, string, string, error) {
+func parseArgs(args *szargs.Args) (string, string, string, error) {
 	var (
 		outFile string
 		source  string
 		trg     string
-		err     error
 	)
 
-	outFile, _, args, err = szargs.Arg("-o").Value(args)
+	outFile, _ = args.ValueString("-o", "")
+	trg, _ = args.ValueString("-t", "")
+	source = args.NextString("source directory", "")
+	args.Done()
 
-	if err == nil {
-		trg, _, args, err = szargs.Arg("-t").Value(args)
-	}
-
-	if err == nil {
-		source, err = szargs.Last("source directory", args)
-	}
-
-	return outFile, source, trg, err //nolint:wrapcheck // Ok.
+	return outFile, source, trg, args.Err() //nolint:wrapcheck // Ok.
 }
 
 func writeFile(outFile, cfg string) error {
@@ -85,7 +79,7 @@ func writeFile(outFile, cfg string) error {
 
 // Process parses the remaining arguments creating a szbackup configuration
 // file.
-func Process(args []string) (string, error) {
+func Process(args *szargs.Args) (string, error) {
 	var (
 		cfgTxt  string
 		source  string
