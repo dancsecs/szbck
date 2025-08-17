@@ -49,7 +49,7 @@ func TestRsync_BuildArgs_NoneNoVerbose(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_NoneOneVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelWarn)
+	chk := sztestlog.CaptureNothing(t, szlog.LevelInfo)
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -72,7 +72,7 @@ func TestRsync_BuildArgs_NoneOneVerbose(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_NoneTwoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelInfo)
+	chk := sztestlog.CaptureNothing(t, szlog.LevelDebug)
 	defer chk.Release()
 
 	chk.StrSlice(

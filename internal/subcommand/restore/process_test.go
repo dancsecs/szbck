@@ -235,7 +235,13 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 	chk.Str(outText, "restore successful")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
@@ -291,7 +297,13 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 	chk.Str(outText, "restore successful")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
@@ -347,7 +359,13 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 	chk.Str(outText, "restore successful")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
@@ -444,7 +462,13 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 
 	chk.AddSub(`\d+`, "#")
 
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+

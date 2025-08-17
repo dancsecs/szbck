@@ -135,7 +135,13 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 
 	chk.Stdout(
 		"Running command: "+
@@ -166,7 +172,13 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
@@ -199,7 +211,18 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
@@ -242,7 +265,18 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
@@ -287,7 +321,11 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log()
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: #ns",
+	)
 	chk.Stdout(
 		"Running command: " +
 			rsyncCmd + basicOptions +

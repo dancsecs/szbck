@@ -247,7 +247,7 @@ func TestStatus_Process_EmptyBackupDir(t *testing.T) {
 }
 
 func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -270,10 +270,18 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 			"",
 		},
 	)
+
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+bkDir+")...",
+		"I:... Calculated size of dir: ("+bkDir+") = #",
+	)
 }
 
 func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -300,4 +308,15 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 			"",
 		},
 	)
+
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+bkDir1+")...",
+		"I:... Calculated size of dir: ("+bkDir1+") = #",
+		"I:Calculating size of dir: ("+bkDir2+")...",
+		"I:... Calculated size of dir: ("+bkDir2+") = #",
+	)
+
 }

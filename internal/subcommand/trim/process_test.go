@@ -185,7 +185,7 @@ func TestTrim_Process_BlankBackupDir(t *testing.T) {
 }
 
 func TestTrim_Process_EmptyBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -202,10 +202,16 @@ func TestTrim_Process_EmptyBackupDir(t *testing.T) {
 			"",
 	)
 	chk.Str(outText, "")
+
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trg+")...",
+		"I:... Calculated size of dir: ("+trg+") = #",
+	)
 }
 
 func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -227,10 +233,16 @@ func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
 			"",
 	)
 	chk.Str(outText, "")
+
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 }
 
 func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -263,6 +275,12 @@ func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
 			"",
 	)
 	chk.Str(outText, "")
+
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 }
 
 func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
@@ -287,7 +305,6 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
@@ -295,6 +312,13 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
@@ -319,7 +343,6 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
@@ -327,6 +350,13 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes\n",
 	)
 	chk.Stderr()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
@@ -348,7 +378,6 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
 	chk.Stdout(
 		"Keeping snapshot: "+fmtTS(snap1),
 		"Keeping snapshot: "+fmtTS(snap2),
@@ -356,6 +385,13 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
@@ -383,7 +419,6 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
 	chk.Stdout(
 		"Purging snapshot: "+fmtTS(purge1),
 		"Purging snapshot: "+fmtTS(purge2),
@@ -393,4 +428,11 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 			"Before: 20,504 After: 12,312 Total Recovered: 8,192 bytes\n",
 	)
 	chk.Stderr()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 }

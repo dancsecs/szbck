@@ -70,9 +70,9 @@ func BuildArgs(
 	if !outConfigured(basicOptions) && !outConfigured(additionalOptions) {
 		// Rsync verbose not configured.  Set according to application
 		// verbose level.
-		if szlog.Level() >= szlog.LevelInfo {
+		if szlog.Level() > szlog.LevelInfo {
 			verboseOptions = []string{"--verbose", "--verbose"}
-		} else if szlog.Level() >= szlog.LevelWarn {
+		} else if szlog.Level() > szlog.LevelWarn {
 			verboseOptions = []string{"--verbose"}
 		}
 	}

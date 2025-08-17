@@ -29,6 +29,7 @@ import (
 	"github.com/dancsecs/szbck/internal/rsync"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/trim"
+	"github.com/dancsecs/szlog"
 )
 
 const initialBackupDirPerm = 0o0700
@@ -121,8 +122,9 @@ func Process(args *szargs.Args) (string, error) {
 	sleepBetweenRuns := time.Nanosecond
 
 	for (runOnce || daemon) && err == nil {
+		szlog.Infof("Starting in: %v", sleepBetweenRuns)
 		time.Sleep(sleepBetweenRuns)
-		startTime = time.Now()
+		startTime = time.Now().Truncate(time.Millisecond)
 		runOnce = false
 
 		newDir, err = cfg.Target.Create(time.Now(), initialBackupDirPerm)

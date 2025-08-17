@@ -201,7 +201,13 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 	chk.Stdout(
 		"Purging oldest backup (DRY RUN)",
 		"",
@@ -227,7 +233,13 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 	chk.Stdout(
 		"Purging oldest backup",
 		"",
@@ -253,7 +265,13 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 	chk.Stdout(
 		"Purging oldest backup",
 		"",
@@ -283,7 +301,13 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 	chk.Stdout(
 		"Purging 2 oldest backups",
 		"",
@@ -346,7 +370,13 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.Log()
+	chk.AddSub(`\d+`, "#")
+	chk.Log(
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+		"I:Calculating size of dir: ("+trgDir+")...",
+		"I:... Calculated size of dir: ("+trgDir+") = #",
+	)
 	chk.Stdout(
 		"Purging 2 oldest backups",
 		"",
