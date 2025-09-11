@@ -22,7 +22,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -70,7 +69,7 @@ func mkRemovedDaily(t []tmeEntry) []bool {
 }
 
 func TestInternalTrim_Identify_Dec31_Sunday(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	tme := []tmeEntry{
@@ -122,7 +121,7 @@ func TestInternalTrim_Identify_Dec31_Sunday(t *testing.T) {
 }
 
 func TestInternalTrim_Identify_Dec31_Monday(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	tme := []tmeEntry{
@@ -174,7 +173,7 @@ func TestInternalTrim_Identify_Dec31_Monday(t *testing.T) {
 }
 
 func TestInternalTrim_Identify_Dec31_Tuesday(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	tme := []tmeEntry{

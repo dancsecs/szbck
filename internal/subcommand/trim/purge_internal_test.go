@@ -26,7 +26,6 @@ import (
 	"time"
 
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -49,7 +48,7 @@ func fmtTS(fName string) string {
 }
 
 func TestInternalTrim_ProcessPurge_RootPermissionFailure(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -89,7 +88,7 @@ func TestInternalTrim_ProcessPurge_RootPermissionFailure(t *testing.T) {
 }
 
 func TestInternalTrim_ProcessPurge_FailureAfterSuccess(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -126,7 +125,7 @@ func TestInternalTrim_ProcessPurge_FailureAfterSuccess(t *testing.T) {
 }
 
 func TestInternalTrim_ProcessPurge_Success(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.

@@ -31,7 +31,6 @@ import (
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/status"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
@@ -106,7 +105,7 @@ func makeSnapshotDir(chk *sztest.Chk, dir string, delta int) string {
 }
 
 func TestStatus_Process_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -124,7 +123,7 @@ func TestStatus_Process_NoArgs(t *testing.T) {
 }
 
 func TestStatus_Process_InvalidConfigFileDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -145,7 +144,7 @@ func TestStatus_Process_InvalidConfigFileDir(t *testing.T) {
 }
 
 func TestStatus_Process_BlankBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -164,7 +163,7 @@ func TestStatus_Process_BlankBackupDir(t *testing.T) {
 }
 
 func TestStatus_Process_InvalidBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -190,7 +189,7 @@ func TestStatus_Process_InvalidBackupDir(t *testing.T) {
 }
 
 func TestStatus_Process_InvalidBackupDirContent(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -225,7 +224,7 @@ func TestStatus_Process_InvalidBackupDirContent(t *testing.T) {
 }
 
 func TestStatus_Process_EmptyBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -247,7 +246,7 @@ func TestStatus_Process_EmptyBackupDir(t *testing.T) {
 }
 
 func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -281,7 +280,7 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 }
 
 func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -318,5 +317,4 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 		"I:Calculating size of dir: ("+bkDir2+")...",
 		"I:... Calculated size of dir: ("+bkDir2+") = #",
 	)
-
 }

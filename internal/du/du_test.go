@@ -23,12 +23,11 @@ import (
 
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/du"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestDu_Total_InvalidDirectory(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	size, err := du.Total("")
@@ -57,7 +56,7 @@ func TestDu_Total_InvalidDirectory(t *testing.T) {
 }
 
 func TestDu_Total_EmptyDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -73,7 +72,7 @@ func TestDu_Total_EmptyDirectory(t *testing.T) {
 }
 
 func TestDu_Total_OneFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()

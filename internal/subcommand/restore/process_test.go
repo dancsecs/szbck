@@ -32,7 +32,6 @@ import (
 	"github.com/dancsecs/szbck/internal/subcommand/restore"
 	"github.com/dancsecs/szbck/internal/subcommand/snapshot"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
@@ -95,7 +94,7 @@ func setupBackupConfig(chk *sztest.Chk) (string, string) {
 }
 
 func TestRestore_MakeDirs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	const backupRootDate = "20251212_151617.1234.szb"
@@ -152,7 +151,7 @@ func TestRestore_MakeDirs(t *testing.T) {
 }
 
 func TestRestoreProcess_noArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -171,7 +170,7 @@ func TestRestoreProcess_noArgs(t *testing.T) {
 }
 
 func TestRestoreProcess_InvalidSpecificDirectory(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	_ = chk.CreateTmpDir()
@@ -196,7 +195,7 @@ func TestRestoreProcess_InvalidSpecificDirectory(t *testing.T) {
 
 //nolint:funlen // Ok.
 func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -263,12 +262,11 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb", "source")+
 			" "+dir+
 			"",
-		"",
 	)
 }
 
 func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -325,12 +323,11 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb", "source")+
 			" "+dir+
 			"",
-		"",
 	)
 }
 
 func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -388,13 +385,12 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb", "source")+
 			" "+dir+
 			"",
-		"",
 	)
 }
 
 //nolint:funlen // Ok.
 func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	// dir := chk.CreateTmpDir()
@@ -490,6 +486,5 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb", "source", "subDir2")+
 			" "+source+
 			"",
-		"",
 	)
 }

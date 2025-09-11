@@ -23,12 +23,11 @@ import (
 	"testing"
 
 	"github.com/dancsecs/szbck/internal/directory"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestDirectory_Is_Missing(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	err := directory.Is("")
@@ -51,7 +50,7 @@ func TestDirectory_Is_Missing(t *testing.T) {
 }
 
 func TestDirectory_Is_Invalid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fDir := chk.CreateTmpDir()
@@ -68,7 +67,7 @@ func TestDirectory_Is_Invalid(t *testing.T) {
 }
 
 func TestDirectory_Is_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpSubDir("source")
@@ -79,7 +78,7 @@ func TestDirectory_Is_Valid(t *testing.T) {
 }
 
 func TestDirectory_IsEmpty(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpSubDir("target")
@@ -98,7 +97,7 @@ func TestDirectory_IsEmpty(t *testing.T) {
 }
 
 func TestDirectory_Link(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()

@@ -21,12 +21,11 @@ package settings
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettingsInternal_Perm_InvalidBlank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -44,7 +43,7 @@ func TestSettingsInternal_Perm_InvalidBlank(t *testing.T) {
 }
 
 func TestSettingsInternal_Perm_InvalidDuplicate(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -64,7 +63,7 @@ func TestSettingsInternal_Perm_InvalidDuplicate(t *testing.T) {
 }
 
 func TestSettingsInternal_Perm_ValidOctal(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -75,7 +74,7 @@ func TestSettingsInternal_Perm_ValidOctal(t *testing.T) {
 }
 
 func TestSettingsInternal_Perm_ValidSymbolic(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config

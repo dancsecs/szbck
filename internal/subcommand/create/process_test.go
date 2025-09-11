@@ -28,12 +28,11 @@ import (
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/create"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestCreate_Process_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -51,7 +50,7 @@ func TestCreate_Process_NoArgs(t *testing.T) {
 }
 
 func TestCreate_Process_InvalidSourceDirectory(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "/INVALID_source"})
@@ -71,7 +70,7 @@ func TestCreate_Process_InvalidSourceDirectory(t *testing.T) {
 }
 
 func TestCreate_Process_OutFileExists(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	source := chk.CreateTmpDir()
@@ -93,7 +92,7 @@ func TestCreate_Process_OutFileExists(t *testing.T) {
 }
 
 func TestCreate_Process_Valid_Stdout(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	source := chk.CreateTmpSubDir("source")
@@ -116,7 +115,7 @@ func TestCreate_Process_Valid_Stdout(t *testing.T) {
 }
 
 func TestCreate_Process_Valid_OutFile(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()

@@ -21,12 +21,11 @@ package settings
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestInternalSettings_ValidateKeyValue_Unknown(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -41,7 +40,7 @@ func TestInternalSettings_ValidateKeyValue_Unknown(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateKeyValue_SnapshotOption(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -51,7 +50,7 @@ func TestInternalSettings_ValidateKeyValue_SnapshotOption(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateKeyValue_RestoreOption(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config

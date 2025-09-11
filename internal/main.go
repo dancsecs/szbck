@@ -34,42 +34,25 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-func parseGlobalArgs(args *szargs.Args) string {
-	var (
-		verbose       int
-		doubleVerbose int
-		subCommand    string
-	)
-
-	verbose = args.Count("-v", "")
-	doubleVerbose = args.Count("-vv", "")
-
-	verbose += doubleVerbose + doubleVerbose
-
-	for verbose > 0 {
-		verbose--
-
-		szlog.IncLevel()
-	}
-
-	subCommand = args.NextString("sub command", "")
-
-	return subCommand
-}
-
 // Main is the actual mainline for the puzzle application classically returning
 // an int to be returned when exiting.
 //
 //nolint:cyclop   // Ok.
-func Main(args *szargs.Args) int {
+func Main(rawArgs []string) int {
 	var (
+		args        *szargs.Args
 		subCommand  string
 		outText     string
 		err         error
 		returnValue int
 	)
 
-	subCommand = parseGlobalArgs(args)
+	cleanedArgs, err := szlog.AbsorbArgs(easterEgg(rawArgs))
+
+	if err == nil {
+		args = szargs.New("", cleanedArgs)
+		subCommand = args.NextString("sub command", "")
+	}
 
 	err = args.Err()
 	if err == nil {
@@ -77,7 +60,7 @@ func Main(args *szargs.Args) int {
 		case "h", "help":
 			outText, err = help.Process(args)
 			if err == nil {
-				outText = args.ProgramName() + "\n" + outText
+				outText = args.ProgramName() + "\n" + outText + "\n"
 			}
 		case "c", "create":
 			outText, err = create.Process(args)
@@ -111,4 +94,20 @@ func Main(args *szargs.Args) int {
 	fmt.Print(outText) //nolint:forbidigo // Ok.
 
 	return returnValue
+}
+
+func easterEgg(args []string) []string {
+	cleanedArgs := make([]string, 0, len(args))
+
+	for _, arg := range args {
+		if arg == "--Reem" {
+			fmt.Print(dedication) //nolint:forbidigo // Ok.
+
+			continue
+		}
+
+		cleanedArgs = append(cleanedArgs, arg)
+	}
+
+	return cleanedArgs
 }

@@ -78,13 +78,22 @@ Examples:
 
 	// Vet changes made to a config.szb file.
 		szbck vet config.szb
+
+# Dedication
+
+This project is dedicated to Reem.
+Your brilliance, courage, and quiet strength continue to inspire me.
+Every line is written in gratitude for the light and hope you brought into my
+life.
+
+NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
+OpenAI.
 */
 package main
 
 import (
 	"os"
 
-	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal"
 )
 
@@ -95,9 +104,5 @@ function which cannot be tested.  Therefore this wrapper is the only function
 in this utility that is not tested.
 */
 func main() {
-	args := szargs.New("", os.Args)
-
-	returnValue := internal.Main(args)
-
-	os.Exit(returnValue)
+	os.Exit(internal.Main(os.Args))
 }

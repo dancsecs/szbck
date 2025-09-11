@@ -23,12 +23,11 @@ import (
 	"testing"
 
 	"github.com/dancsecs/szbck/internal/rsync"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestRsyncRun_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	err := rsync.Run(nil, os.Stdout, nil)
@@ -52,7 +51,7 @@ func TestRsyncRun_NoArgs(t *testing.T) {
 }
 
 func TestRsyncRun_SimpleFiles(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	source := chk.CreateTmpSubDir("source")

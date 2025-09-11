@@ -26,12 +26,11 @@ import (
 
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestTarget_New_Blank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	trg, err := target.New("")
@@ -51,7 +50,7 @@ func TestTarget_New_Blank(t *testing.T) {
 }
 
 func TestTarget_New_DoesNotExist(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	trg, err := target.New("DOES_NOT_EXIST")
@@ -71,7 +70,7 @@ func TestTarget_New_DoesNotExist(t *testing.T) {
 }
 
 func TestTarget_HasLatest_NotALink(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -93,7 +92,7 @@ func TestTarget_HasLatest_NotALink(t *testing.T) {
 }
 
 func TestTarget_HasLatest_Valid_EmptyDirectory(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -108,7 +107,7 @@ func TestTarget_HasLatest_Valid_EmptyDirectory(t *testing.T) {
 }
 
 func TestTarget_HasLatest_Valid_HasLink(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -130,7 +129,7 @@ func TestTarget_HasLatest_Valid_HasLink(t *testing.T) {
 }
 
 func TestConfigBackup_Create_AlreadyExists(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -164,7 +163,7 @@ func TestConfigBackup_Create_AlreadyExists(t *testing.T) {
 }
 
 func TestConfigBackup_Create_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -186,7 +185,7 @@ func TestConfigBackup_Create_Valid(t *testing.T) {
 }
 
 func TestConfigBackup_SetLatest(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -215,7 +214,7 @@ func TestConfigBackup_SetLatest(t *testing.T) {
 
 //nolint:funlen // Ok.
 func TestDirectory_Split(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	reSplit := regexp.MustCompile(`abc`)

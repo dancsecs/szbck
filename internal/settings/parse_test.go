@@ -24,12 +24,11 @@ import (
 
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/settings"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettings_Parse_InvalidSource(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgData := strings.Replace(
@@ -58,7 +57,7 @@ func TestSettings_Parse_InvalidSource(t *testing.T) {
 }
 
 func TestSettings_Parse_UnknownKey(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgData := "unknownKey: unknownValue"
@@ -80,7 +79,7 @@ func TestSettings_Parse_UnknownKey(t *testing.T) {
 }
 
 func TestSettings_Parse_InvalidEntry(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgData := "noValue"
@@ -101,7 +100,7 @@ func TestSettings_Parse_InvalidEntry(t *testing.T) {
 }
 
 func TestSettings_Parse_InvalidTarget(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	srcDir := chk.CreateTmpSubDir("source")

@@ -25,12 +25,11 @@ import (
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettings_Create_InvalidSource(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fDir := chk.CreateTmpDir()
@@ -50,7 +49,7 @@ func TestSettings_Create_InvalidSource(t *testing.T) {
 }
 
 func TestSettings_Create_InvalidTarget(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fDir := chk.CreateTmpDir()
@@ -74,7 +73,7 @@ func TestSettings_Create_InvalidTarget(t *testing.T) {
 }
 
 func TestConfigBackup_Create_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	src := chk.CreateTmpSubDir("source")

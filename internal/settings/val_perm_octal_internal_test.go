@@ -21,12 +21,11 @@ package settings
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettingsInternal_PermOctal_InvalidBlank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("")
@@ -42,7 +41,7 @@ func TestSettingsInternal_PermOctal_InvalidBlank(t *testing.T) {
 }
 
 func TestSettingsInternal_PermOctal_InvalidSyntax(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("0o0abc")
@@ -58,7 +57,7 @@ func TestSettingsInternal_PermOctal_InvalidSyntax(t *testing.T) {
 }
 
 func TestSettingsInternal_PermOctal_InvalidPrefix(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("9")
@@ -74,7 +73,7 @@ func TestSettingsInternal_PermOctal_InvalidPrefix(t *testing.T) {
 }
 
 func TestSettingsInternal_PermOctal_InvalidParseRange(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("0o077777777777777777777777777777777")
@@ -90,7 +89,7 @@ func TestSettingsInternal_PermOctal_InvalidParseRange(t *testing.T) {
 }
 
 func TestSettingsInternal_PermOctal_InvalidPermissionRangeMin(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("0o00")
@@ -106,7 +105,7 @@ func TestSettingsInternal_PermOctal_InvalidPermissionRangeMin(t *testing.T) {
 }
 
 func TestSettingsInternal_PermOctal_InvalidPermissionRangeMax(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("0o07770")
@@ -122,7 +121,7 @@ func TestSettingsInternal_PermOctal_InvalidPermissionRangeMax(t *testing.T) {
 }
 
 func TestSettingsInternal_PermOctal_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateOctalPermission("0o023")

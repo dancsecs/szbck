@@ -30,7 +30,6 @@ import (
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/prune"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
@@ -105,7 +104,7 @@ func makeSnapshotDir(chk *sztest.Chk, dir string, delta int) string {
 }
 
 func TestPrune_Process_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -123,7 +122,7 @@ func TestPrune_Process_NoArgs(t *testing.T) {
 }
 
 func TestPrune_Process_BlankBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -142,7 +141,7 @@ func TestPrune_Process_BlankBackupDir(t *testing.T) {
 }
 
 func TestPrune_Process_EmptyBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -162,7 +161,7 @@ func TestPrune_Process_EmptyBackupDir(t *testing.T) {
 }
 
 func TestPrune_Process_OnlyOneBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -184,7 +183,7 @@ func TestPrune_Process_OnlyOneBackupDir(t *testing.T) {
 }
 
 func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -213,13 +212,13 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 		"",
 		"Purging backup: "+dirToDelete,
 		"purge successful (DRY RUN)\n"+
-			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes\n",
+			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
 }
 
 func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -245,12 +244,13 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 		"",
 		"Purging backup: "+dirToDelete,
 		"purge successful\n"+
-			"Before: 12,312 After: 8,216 Total Recovered: 4,096 bytes\n")
+			"Before: 12,312 After: 8,216 Total Recovered: 4,096 bytes",
+	)
 	chk.Stderr()
 }
 
 func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -277,13 +277,13 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 		"",
 		"Purging backup: "+dirToDelete,
 		"purge successful\n"+
-			"Before: 16,408 After: 12,312 Total Recovered: 4,096 bytes\n",
+			"Before: 16,408 After: 12,312 Total Recovered: 4,096 bytes",
 	)
 	chk.Stderr()
 }
 
 func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -314,13 +314,13 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 		"Purging backup: "+dirToDelete1,
 		"Purging backup: "+dirToDelete2,
 		"purge successful\n"+
-			"Before: 16,408 After: 8,216 Total Recovered: 8,192 bytes\n",
+			"Before: 16,408 After: 8,216 Total Recovered: 8,192 bytes",
 	)
 	chk.Stderr()
 }
 
 func TestPrune_Process_TwoBackupDirs_InvalidNum(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -351,7 +351,7 @@ func TestPrune_Process_TwoBackupDirs_InvalidNum(t *testing.T) {
 }
 
 func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -383,7 +383,7 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 		"Purging backup: "+dirToDelete1,
 		"Purging backup: "+dirToDelete2,
 		"purge successful\n"+
-			"Before: 16,408 After: 8,216 Total Recovered: 8,192 bytes\n",
+			"Before: 16,408 After: 8,216 Total Recovered: 8,192 bytes",
 	)
 	chk.Stderr()
 }

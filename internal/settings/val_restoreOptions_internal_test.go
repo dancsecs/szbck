@@ -21,12 +21,11 @@ package settings
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettingsInternal_ValidateRestoreOptions_Blank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -42,7 +41,7 @@ func TestSettingsInternal_ValidateRestoreOptions_Blank(t *testing.T) {
 }
 
 func TestSettingsInternal_ValidateRestoreOptions_Duplicate(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -60,7 +59,7 @@ func TestSettingsInternal_ValidateRestoreOptions_Duplicate(t *testing.T) {
 }
 
 func TestSettingsInternal_ValidateRestoreOptions_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config

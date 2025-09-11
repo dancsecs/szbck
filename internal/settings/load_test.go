@@ -24,12 +24,11 @@ import (
 
 	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal/settings"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettings_Load_DoesNotExist(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfg, err := settings.Load("DOES_NOT_EXIST")
@@ -45,7 +44,7 @@ func TestSettings_Load_DoesNotExist(t *testing.T) {
 }
 
 func TestConfigBackup_Load_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	src := chk.CreateTmpSubDir("source")
@@ -80,7 +79,7 @@ func TestConfigBackup_Load_Valid(t *testing.T) {
 }
 
 func TestConfigBackup_LoadFromArgs_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -96,7 +95,7 @@ func TestConfigBackup_LoadFromArgs_NoArgs(t *testing.T) {
 }
 
 func TestConfigBackup_LoadFromArgs_NoneDefined(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	src := chk.CreateTmpSubDir("source")
@@ -118,7 +117,7 @@ func TestConfigBackup_LoadFromArgs_NoneDefined(t *testing.T) {
 }
 
 func TestConfigBackup_LoadFromArgs_NoDefaultOverrideOnly(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	src := chk.CreateTmpSubDir("source")
@@ -136,7 +135,7 @@ func TestConfigBackup_LoadFromArgs_NoDefaultOverrideOnly(t *testing.T) {
 }
 
 func TestConfigBackup_LoadFromArgs_DefaultNoOverride(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	src := chk.CreateTmpSubDir("source")
@@ -154,7 +153,7 @@ func TestConfigBackup_LoadFromArgs_DefaultNoOverride(t *testing.T) {
 }
 
 func TestConfigBackup_LoadFromArgs_DefaultAndOverride(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	src := chk.CreateTmpSubDir("source")

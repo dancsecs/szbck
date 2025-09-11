@@ -24,12 +24,11 @@ import (
 
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/du"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestDuRun_InvalidDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	out, err := du.Run(nil, os.Stderr)
@@ -79,7 +78,7 @@ func TestDuRun_InvalidDirectory(t *testing.T) {
 }
 
 func TestDuRun_EmptyDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()

@@ -27,7 +27,7 @@ import (
 )
 
 func TestFormat_Int(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.Str(
@@ -47,7 +47,7 @@ func TestFormat_Int(t *testing.T) {
 }
 
 func TestOut_Print(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	szlog.SetLevel(szlog.LevelError)
@@ -63,6 +63,5 @@ func TestOut_Print(t *testing.T) {
 	chk.Stdout(
 		"This line will be displayed",
 		"This formatted line will be displayed",
-		"",
 	)
 }

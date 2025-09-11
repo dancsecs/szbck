@@ -31,12 +31,11 @@ import (
 	"github.com/dancsecs/szbck/internal/subcommand/status"
 	"github.com/dancsecs/szbck/internal/subcommand/trim"
 	"github.com/dancsecs/szbck/internal/subcommand/vet"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestHelpProcess_UnknownSubcommand(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "unknown"})
@@ -56,7 +55,7 @@ func TestHelpProcess_UnknownSubcommand(t *testing.T) {
 }
 
 func TestHelpProcess_NoSubcommand(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -80,7 +79,7 @@ func TestHelpProcess_NoSubcommand(t *testing.T) {
 }
 
 func TestHelpProcess_All(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "ALL"})
@@ -104,7 +103,7 @@ func TestHelpProcess_All(t *testing.T) {
 }
 
 func TestHelpProcess_Help(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "H"})
@@ -127,7 +126,7 @@ func TestHelpProcess_Help(t *testing.T) {
 }
 
 func TestHelpProcess_Initialize(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "I"})
@@ -159,7 +158,7 @@ func TestHelpProcess_Initialize(t *testing.T) {
 }
 
 func TestHelpProcess_Snapshot(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "S"})
@@ -191,7 +190,7 @@ func TestHelpProcess_Snapshot(t *testing.T) {
 }
 
 func TestHelpProcess_Restore(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "R"})
@@ -223,7 +222,7 @@ func TestHelpProcess_Restore(t *testing.T) {
 }
 
 func TestHelpProcess_Prune(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "P"})
@@ -246,7 +245,7 @@ func TestHelpProcess_Prune(t *testing.T) {
 }
 
 func TestHelpProcess_Status(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "STAT"})
@@ -269,7 +268,7 @@ func TestHelpProcess_Status(t *testing.T) {
 }
 
 func TestHelpProcess_Trim(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "T"})
@@ -292,7 +291,7 @@ func TestHelpProcess_Trim(t *testing.T) {
 }
 
 func TestHelpProcess_Vet(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg", "V"})

@@ -22,12 +22,11 @@ import (
 	"testing"
 
 	"github.com/dancsecs/szbck/internal/directory"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestInternalSettings_ValidateSource_InvalidBlank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -44,7 +43,7 @@ func TestInternalSettings_ValidateSource_InvalidBlank(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateSource_InvalidDirectory(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -64,7 +63,7 @@ func TestInternalSettings_ValidateSource_InvalidDirectory(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateSource_InvalidDuplicate(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -83,7 +82,7 @@ func TestInternalSettings_ValidateSource_InvalidDuplicate(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateSource_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config

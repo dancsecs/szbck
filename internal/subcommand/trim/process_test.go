@@ -30,7 +30,6 @@ import (
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/trim"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
@@ -148,7 +147,7 @@ func fmtTS(fName string) string {
 }
 
 func TestTrim_Process_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -166,7 +165,7 @@ func TestTrim_Process_NoArgs(t *testing.T) {
 }
 
 func TestTrim_Process_BlankBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -185,7 +184,7 @@ func TestTrim_Process_BlankBackupDir(t *testing.T) {
 }
 
 func TestTrim_Process_EmptyBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk)
@@ -211,7 +210,7 @@ func TestTrim_Process_EmptyBackupDir(t *testing.T) {
 }
 
 func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -242,7 +241,7 @@ func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
 }
 
 func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -284,7 +283,7 @@ func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
 }
 
 func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -322,7 +321,7 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -347,7 +346,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
 		"trim successful (Purged: 0) (DRY RUN)\n"+
-			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes\n",
+			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
 	chk.AddSub(`\d+`, "#")
@@ -360,7 +359,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -395,7 +394,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	// A little before now without sleeping.
@@ -425,7 +424,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 		"Keeping snapshot: "+fmtTS(keep3),
 		"Keeping snapshot: "+fmtTS(keepRoot),
 		"trim successful (Purged: 2)\n"+
-			"Before: 20,504 After: 12,312 Total Recovered: 8,192 bytes\n",
+			"Before: 20,504 After: 12,312 Total Recovered: 8,192 bytes",
 	)
 	chk.Stderr()
 	chk.AddSub(`\d+`, "#")

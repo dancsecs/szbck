@@ -21,12 +21,11 @@ package settings
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestInternalSettings_ValRetentionHourly_InvalidBlank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -42,7 +41,7 @@ func TestInternalSettings_ValRetentionHourly_InvalidBlank(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_InvalidSyntax(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -58,7 +57,7 @@ func TestInternalSettings_ValRetentionHourly_InvalidSyntax(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_InvalidNumber(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -74,7 +73,7 @@ func TestInternalSettings_ValRetentionHourly_InvalidNumber(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_InvalidUnits(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -91,7 +90,7 @@ func TestInternalSettings_ValRetentionHourly_InvalidUnits(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_Low(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -107,7 +106,7 @@ func TestInternalSettings_ValRetentionHourly_Low(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_ValidHours(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -116,7 +115,7 @@ func TestInternalSettings_ValRetentionHourly_ValidHours(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_ValidDays(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -125,7 +124,7 @@ func TestInternalSettings_ValRetentionHourly_ValidDays(t *testing.T) {
 }
 
 func TestInternalSettings_ValRetentionHourly_Duplicate(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config

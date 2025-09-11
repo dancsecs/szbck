@@ -28,7 +28,6 @@ import (
 	"github.com/dancsecs/szbck/internal/directory"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/vet"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
@@ -76,7 +75,7 @@ func setupBackupConfig(chk *sztest.Chk, setSourceError bool) string {
 }
 
 func TestVet_Process_NoArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -94,7 +93,7 @@ func TestVet_Process_NoArgs(t *testing.T) {
 }
 
 func TestVet_Process_SourceError(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk, true)
@@ -123,7 +122,7 @@ func TestVet_Process_SourceError(t *testing.T) {
 }
 
 func TestVet_Process_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cfgFile := setupBackupConfig(chk, false)

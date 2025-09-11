@@ -22,12 +22,11 @@ import (
 	"testing"
 
 	"github.com/dancsecs/szbck/internal/directory"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestInternalSettings_ValidateTarget_InvalidBlank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -44,7 +43,7 @@ func TestInternalSettings_ValidateTarget_InvalidBlank(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateTarget_InvalidDirectory(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -64,7 +63,7 @@ func TestInternalSettings_ValidateTarget_InvalidDirectory(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateTarget_Valid(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config
@@ -74,7 +73,7 @@ func TestInternalSettings_ValidateTarget_Valid(t *testing.T) {
 }
 
 func TestInternalSettings_ValidateTarget_InvalidDuplicate(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var cfg Config

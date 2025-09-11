@@ -21,12 +21,11 @@ package settings
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestSettingsInternal_PermSymbolic_InvalidBlank(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("")
@@ -42,7 +41,7 @@ func TestSettingsInternal_PermSymbolic_InvalidBlank(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_InvalidGroupsMin(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission(";")
@@ -58,7 +57,7 @@ func TestSettingsInternal_PermSymbolic_InvalidGroupsMin(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_InvalidGroupsMax(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission(";;;")
@@ -74,7 +73,7 @@ func TestSettingsInternal_PermSymbolic_InvalidGroupsMax(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_InvalidGroupsIdentifier(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("q:rwx;g:rx;o:-")
@@ -112,7 +111,7 @@ func TestSettingsInternal_PermSymbolic_InvalidGroupsIdentifier(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_InvalidPermissionsNone(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("u:-;g:-;o:-")
@@ -128,7 +127,7 @@ func TestSettingsInternal_PermSymbolic_InvalidPermissionsNone(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_ValidUser(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("u:rwx;g:-;o:-")
@@ -161,7 +160,7 @@ func TestSettingsInternal_PermSymbolic_ValidUser(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_ValidGroup(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("u:-;g:rwx;o:-")
@@ -194,7 +193,7 @@ func TestSettingsInternal_PermSymbolic_ValidGroup(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_ValidOther(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("u:-;g:-;o:rwx")
@@ -227,7 +226,7 @@ func TestSettingsInternal_PermSymbolic_ValidOther(t *testing.T) {
 }
 
 func TestSettingsInternal_PermSymbolic_ValidAll(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	perm, err := validateSymbolicPermission("u:rwx;g:rwx;o:rwx")

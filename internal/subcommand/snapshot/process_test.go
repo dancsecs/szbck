@@ -32,7 +32,6 @@ import (
 	"github.com/dancsecs/szbck/internal/subcommand/snapshot"
 	"github.com/dancsecs/szbck/internal/subcommand/trim"
 	"github.com/dancsecs/szbck/internal/target"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
@@ -96,7 +95,7 @@ func setupBackupConfig(chk *sztest.Chk) (string, string) {
 }
 
 func TestSnapshotProcess_NextHourIn(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.Dur(snapshot.NextHourIn(0), time.Hour)
@@ -105,7 +104,7 @@ func TestSnapshotProcess_NextHourIn(t *testing.T) {
 }
 
 func TestSnapshotProcess_MissingArgs(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	args := szargs.New("", []string{"prg"})
@@ -123,7 +122,7 @@ func TestSnapshotProcess_MissingArgs(t *testing.T) {
 }
 
 func TestSnapshotProcess_NoFiles(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	source, cfgFile := setupBackupConfig(chk)
@@ -150,12 +149,12 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
 		"snapshot successful\n"+
-			"Before: 8,192 After: 12,312 Used: 4,120 bytes\n",
+			"Before: 8,192 After: 12,312 Used: 4,120 bytes",
 	)
 }
 
 func TestSnapshotProcess_DryRun(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	source, cfgFile := setupBackupConfig(chk)
@@ -192,7 +191,7 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 }
 
 func TestSnapshotProcess_OneFile(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	source, cfgFile := setupBackupConfig(chk)
@@ -244,7 +243,7 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 }
 
 func TestSnapshotProcess_TwoFiles(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	source, cfgFile := setupBackupConfig(chk)
@@ -298,7 +297,7 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 }
 
 func TestSnapshotProcess_Trim(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	source, cfgFile := setupBackupConfig(chk)

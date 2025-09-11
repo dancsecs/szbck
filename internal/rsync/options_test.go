@@ -22,12 +22,11 @@ import (
 	"testing"
 
 	"github.com/dancsecs/szbck/internal/rsync"
-	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestRsync_BuildArgs_NoneNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelError)
+	chk := sztestlog.CaptureNothing(t, "--log", "ERROR")
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -49,7 +48,7 @@ func TestRsync_BuildArgs_NoneNoVerbose(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_NoneOneVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelInfo)
+	chk := sztestlog.CaptureNothing(t, "--log", "INFO")
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -72,7 +71,7 @@ func TestRsync_BuildArgs_NoneOneVerbose(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_NoneTwoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelDebug)
+	chk := sztestlog.CaptureNothing(t, "--log", "DEBUG")
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -96,7 +95,7 @@ func TestRsync_BuildArgs_NoneTwoVerbose(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_NoneQuiet(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -122,7 +121,7 @@ func TestRsync_BuildArgs_NoneQuiet(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_WithDeleteFromTarget(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -147,7 +146,7 @@ func TestRsync_BuildArgs_WithDeleteFromTarget(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_WithDryRun(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -172,7 +171,7 @@ func TestRsync_BuildArgs_WithDryRun(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_WithLinkDest(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -197,7 +196,7 @@ func TestRsync_BuildArgs_WithLinkDest(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_WithAdditional(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.StrSlice(
@@ -222,7 +221,7 @@ func TestRsync_BuildArgs_WithAdditional(t *testing.T) {
 }
 
 func TestRsync_BuildArgs_WithOnlyAdditional(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t, szlog.LevelAll)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.StrSlice(
