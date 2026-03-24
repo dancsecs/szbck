@@ -28,7 +28,7 @@ import (
 	"github.com/dancsecs/szbck/internal/directory"
 )
 
-// Run executes rsync with the supplied arguments.
+// Run executes du with the supplied arguments.
 func Run(args []string, cpyErr *os.File) (string, error) {
 	var (
 		duPath string
