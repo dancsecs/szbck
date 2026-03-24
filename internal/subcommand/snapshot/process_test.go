@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -170,7 +170,7 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -186,7 +186,7 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
 		"snapshot successful (DRY RUN)\n"+
-			"Before: #,# After: #,# Used: # bytes",
+			"Before: # After: # Used: # bytes",
 	)
 }
 
@@ -209,7 +209,7 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -229,7 +229,7 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
 		"snapshot successful\n"+
-			"Before: #,# After: #,# Used: #,# bytes",
+			"Before: # After: # Used: # bytes",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -238,7 +238,7 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
 		"snapshot successful\n"+
-			"Before: #,# After: #,# Used: #,# bytes",
+			"Before: # After: # Used: # bytes",
 	)
 }
 
@@ -263,7 +263,7 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -283,7 +283,7 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
 		"snapshot successful\n"+
-			"Before: #,# After: #,# Used: #,# bytes",
+			"Before: # After: # Used: # bytes",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -292,7 +292,7 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
 		"snapshot successful\n"+
-			"Before: #,# After: #,# Used: #,# bytes",
+			"Before: # After: # Used: # bytes",
 	)
 }
 
@@ -319,7 +319,7 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",

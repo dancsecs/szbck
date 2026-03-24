@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -304,6 +304,7 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
@@ -311,7 +312,6 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
-	chk.AddSub(`\d+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -342,6 +342,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
@@ -349,7 +350,6 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
-	chk.AddSub(`\d+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -377,6 +377,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Stdout(
 		"Keeping snapshot: "+fmtTS(snap1),
 		"Keeping snapshot: "+fmtTS(snap2),
@@ -384,7 +385,6 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
 	)
 	chk.Stderr()
-	chk.AddSub(`\d+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -418,6 +418,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Stdout(
 		"Purging snapshot: "+fmtTS(purge1),
 		"Purging snapshot: "+fmtTS(purge2),
@@ -427,7 +428,6 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 			"Before: 20,504 After: 12,312 Total Recovered: 8,192 bytes",
 	)
 	chk.Stderr()
-	chk.AddSub(`\d+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",

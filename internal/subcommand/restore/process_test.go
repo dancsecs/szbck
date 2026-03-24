@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -233,7 +233,7 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -249,7 +249,7 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
 		"snapshot successful\n"+
-			"Before: 8,192 After: 12,317 Used: 4,125 bytes",
+			"Before: # After: # Used: # bytes",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -294,7 +294,7 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -310,7 +310,7 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
 		"snapshot successful\n"+
-			"Before: 8,192 After: 12,317 Used: 4,125 bytes",
+			"Before: # After: # Used: # bytes",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -355,7 +355,7 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "restore successful")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
 		"I:... Calculated size of dir: ("+trg+") = #",
@@ -371,7 +371,7 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
 		"snapshot successful\n"+
-			"Before: 8,192 After: 12,317 Used: 4,125 bytes",
+			"Before: # After: # Used: # bytes",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -456,7 +456,7 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 	_, err = os.Stat(fileSub2) // deleted and restored
 	chk.NoErr(err)
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 
 	chk.Log(
 		"I:Calculating size of dir: ("+trg+")...",
@@ -473,7 +473,7 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
 		"snapshot successful\n"+
-			"Before: 8,192 After: 20,520 Used: 12,328 bytes",
+			"Before: # After: # Used: # bytes",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+

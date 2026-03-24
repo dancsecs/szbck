@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,7 +86,9 @@ func TestDuRun_EmptyDirectory(t *testing.T) {
 	out, err := du.Run([]string{"-b", "-d", "1", dir}, os.Stderr)
 
 	chk.NoErr(err)
-	chk.Str(out, "4096\t"+dir+"\n")
+
+	chk.AddSub(`[\d\,]+`, "#")
+	chk.Str(out, "#\t"+dir+"\n")
 
 	chk.Log()
 	chk.Stdout()

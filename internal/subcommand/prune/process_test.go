@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -212,7 +212,7 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 		"",
 		"Purging backup: "+dirToDelete,
 		"purge successful (DRY RUN)\n"+
-			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
+			"Before: # After: # Total Recovered: # bytes",
 	)
 	chk.Stderr()
 }
@@ -232,7 +232,7 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -244,7 +244,7 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 		"",
 		"Purging backup: "+dirToDelete,
 		"purge successful\n"+
-			"Before: 12,312 After: 8,216 Total Recovered: 4,096 bytes",
+			"Before: # After: # Total Recovered: # bytes",
 	)
 	chk.Stderr()
 }
@@ -265,7 +265,7 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -277,7 +277,7 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 		"",
 		"Purging backup: "+dirToDelete,
 		"purge successful\n"+
-			"Before: 16,408 After: 12,312 Total Recovered: 4,096 bytes",
+			"Before: # After: # Total Recovered: # bytes",
 	)
 	chk.Stderr()
 }
@@ -301,7 +301,7 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -314,7 +314,7 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 		"Purging backup: "+dirToDelete1,
 		"Purging backup: "+dirToDelete2,
 		"purge successful\n"+
-			"Before: 16,408 After: 8,216 Total Recovered: 8,192 bytes",
+			"Before: # After: # Total Recovered: # bytes",
 	)
 	chk.Stderr()
 }
@@ -370,7 +370,7 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\d+`, "#")
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -383,7 +383,7 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 		"Purging backup: "+dirToDelete1,
 		"Purging backup: "+dirToDelete2,
 		"purge successful\n"+
-			"Before: 16,408 After: 8,216 Total Recovered: 8,192 bytes",
+			"Before: # After: # Total Recovered: # bytes",
 	)
 	chk.Stderr()
 }

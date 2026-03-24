@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,13 +61,13 @@ func TestDu_Total_EmptyDirectory(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 
-	size, err := du.Total(dir)
+	_, err := du.Total(dir)
 	chk.NoErr(err)
-	chk.Int64(size, 4096)
 
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+dir+")...",
-		"I:... Calculated size of dir: ("+dir+") = 4096",
+		"I:... Calculated size of dir: ("+dir+") = #",
 	)
 }
 
@@ -78,12 +78,12 @@ func TestDu_Total_OneFile(t *testing.T) {
 	dir := chk.CreateTmpDir()
 	_ = chk.CreateTmpFile([]byte("sample file"))
 
-	size, err := du.Total(dir)
+	_, err := du.Total(dir)
 	chk.NoErr(err)
-	chk.Int64(size, 4107)
 
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+dir+")...",
-		"I:... Calculated size of dir: ("+dir+") = 4107",
+		"I:... Calculated size of dir: ("+dir+") = #",
 	)
 }

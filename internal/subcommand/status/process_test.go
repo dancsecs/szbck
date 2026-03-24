@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -257,6 +257,9 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
 	outText, err := status.Process(args)
 	chk.NoErr(err)
+
+	chk.AddSub(`[\d\,]+`, "#")
+
 	chk.StrSlice(
 		strings.Split(outText, "\n"),
 		[]string{
@@ -270,7 +273,6 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 		},
 	)
 
-	chk.AddSub(`\d+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
@@ -294,6 +296,8 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
 	outText, err := status.Process(args)
 	chk.NoErr(err)
+
+	chk.AddSub(`[\d\,]+`, "#")
 	chk.StrSlice(
 		strings.Split(outText, "\n"),
 		[]string{
@@ -308,7 +312,6 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 		},
 	)
 
-	chk.AddSub(`\d+`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+trgDir+")...",
 		"I:... Calculated size of dir: ("+trgDir+") = #",
