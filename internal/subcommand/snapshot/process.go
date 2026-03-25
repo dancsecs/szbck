@@ -93,7 +93,7 @@ func run(dryRun bool, linkDest, newDir string, cfg *settings.Config) error {
 
 // Process parses the remaining arguments creating a szbackup snapshot.
 //
-//nolint:cyclop,funlen // Ok.
+//nolint:cyclop,funlen,gocognit // Ok.
 func Process(args *szargs.Args) (string, error) {
 	var (
 		cfg            *settings.Config

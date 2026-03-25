@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // PathSeparator provides for a single project reference for a string casted
@@ -56,22 +57,25 @@ func Is(dir string) error {
 // IsEmpty confirms that a "new" target directory is empty.
 func IsEmpty(dir string) error {
 	var (
-		items *os.File
-		err   error
+		itemDir *os.File
+		items   []string
+		err     error
 	)
 
-	items, err = os.Open(dir) //nolint:gosec // Ok.
+	itemDir, err = os.Open(dir) //nolint:gosec // Ok.
 
 	if err == nil {
 		defer func() {
-			_ = items.Close()
+			_ = itemDir.Close()
 		}()
 
-		_, err = items.Readdirnames(1)
+		items, err = itemDir.Readdirnames(1)
 	}
 
 	if err == nil {
-		err = ErrNewNotEmpty
+		if len(items) != 1 || !strings.HasSuffix(items[0], "lost+found") {
+			err = ErrNewNotEmpty
+		}
 	} else if errors.Is(err, io.EOF) {
 		return nil
 	}

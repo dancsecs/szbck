@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,11 @@ func TestDirectory_IsEmpty(t *testing.T) {
 	dir := chk.CreateTmpSubDir("target")
 
 	err := directory.IsEmpty(dir)
+	chk.NoErr(err)
+
+	_ = chk.CreateTmpSubDir(dir, "lost+found")
+
+	err = directory.IsEmpty(dir)
 	chk.NoErr(err)
 
 	_ = chk.CreateTmpFileIn(dir, nil)
