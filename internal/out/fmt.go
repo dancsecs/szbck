@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,11 @@ var (
 // Int returns the number formatted with local separators.
 func Int(n int64) string {
 	return printer.Sprintf("%d", n)
+}
+
+// Pct returns the number formatted as a percent with local separators.
+func Pct(n float64) string {
+	return printer.Sprintf("%.2f", n*100.0) + "%" //nolint:mnd  // Ok.
 }
 
 // Print writes the provided text to os.Stdout of szlog has warnings enabled.

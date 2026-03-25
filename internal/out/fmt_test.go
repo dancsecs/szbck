@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,26 @@ func TestFormat_Int(t *testing.T) {
 	chk.Str(
 		out.Int(-43567823256),
 		"-43,567,823,256",
+	)
+}
+
+func TestFormat_Pct(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	chk.Str(
+		out.Pct(0),
+		"0.00%",
+	)
+
+	chk.Str(
+		out.Pct(35.67825256),
+		"3,567.83%",
+	)
+
+	chk.Str(
+		out.Pct(-43.567853256),
+		"-4,356.79%",
 	)
 }
 
