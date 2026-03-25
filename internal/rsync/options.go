@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,9 +70,9 @@ func BuildArgs(
 	if !outConfigured(basicOptions) && !outConfigured(additionalOptions) {
 		// Rsync verbose not configured.  Set according to application
 		// verbose level.
-		if szlog.Level() > szlog.LevelInfo {
+		if szlog.Verbose() > 1 {
 			verboseOptions = []string{"--verbose", "--verbose"}
-		} else if szlog.Level() > szlog.LevelWarn {
+		} else if szlog.Verbose() > 0 {
 			verboseOptions = []string{"--verbose"}
 		}
 	}

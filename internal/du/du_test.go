@@ -56,7 +56,7 @@ func TestDu_Total_InvalidDirectory(t *testing.T) {
 }
 
 func TestDu_Total_EmptyDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t, "-v")
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -65,14 +65,14 @@ func TestDu_Total_EmptyDirectory(t *testing.T) {
 	chk.NoErr(err)
 
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+dir+")...",
-		"I:... Calculated size of dir: ("+dir+") = #",
+	chk.Stdout(
+		"Calculating size of dir: ("+dir+")...",
+		"... Calculated size of dir: ("+dir+") = #",
 	)
 }
 
 func TestDu_Total_OneFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t, "-v")
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -82,8 +82,8 @@ func TestDu_Total_OneFile(t *testing.T) {
 	chk.NoErr(err)
 
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+dir+")...",
-		"I:... Calculated size of dir: ("+dir+") = #",
+	chk.Stdout(
+		"Calculating size of dir: ("+dir+")...",
+		"... Calculated size of dir: ("+dir+") = #",
 	)
 }

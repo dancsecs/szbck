@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ func Total(dir string) (int64, error) {
 	err = directory.Is(dir)
 
 	if err == nil {
-		szlog.Info("Calculating size of dir: (", dir, ")...")
+		szlog.Say1("Calculating size of dir: (", dir, ")...\n")
 		tmpStr, err = Run([]string{"-s", "-b", dir}, os.Stderr)
 	}
 
@@ -57,7 +57,7 @@ func Total(dir string) (int64, error) {
 	}
 
 	if err == nil {
-		szlog.Info("... Calculated size of dir: (", dir, ") = ", total)
+		szlog.Say1("... Calculated size of dir: (", dir, ") = ", total, "\n")
 
 		return total, nil
 	}

@@ -45,14 +45,14 @@ func Pct(n float64) string {
 
 // Print writes the provided text to os.Stdout of szlog has warnings enabled.
 func Print(msg ...any) {
-	if szlog.Default().LogWarn {
+	if szlog.Verbose() > 0 {
 		_, _ = printer.Print(msg...)
 	}
 }
 
 // Printf writes the provided text to os.Stdout of szlog has warnings enabled.
 func Printf(msgFmt string, msgArgs ...any) {
-	if szlog.Default().LogWarn {
+	if szlog.Verbose() > 0 {
 		_, _ = printer.Printf(msgFmt, msgArgs...)
 	}
 }

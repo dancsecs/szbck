@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ func processPurge(
 
 		if err == nil {
 			if remove[i] {
-				out.Print("Purging snapshot"+dryRun+": "+dir+": "+
+				out.Print("*Purged snapshot"+dryRun+": "+dir+": "+
 					tms[i].Format(time.RFC850), "\n",
 				)
 			} else {

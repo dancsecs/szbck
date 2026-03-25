@@ -405,8 +405,8 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Stdout(
-		"Purging snapshot: "+fmtTS(purge1),
-		"Purging snapshot: "+fmtTS(purge2),
+		"*Purged snapshot: "+fmtTS(purge1),
+		"*Purged snapshot: "+fmtTS(purge2),
 		"Keeping snapshot: "+fmtTS(keep3),
 		"Keeping snapshot: "+fmtTS(keepRoot),
 		"trim successful (Purged: 2)",

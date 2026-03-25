@@ -121,7 +121,7 @@ func Process(args *szargs.Args) (string, error) {
 	sleepBetweenRuns := time.Nanosecond
 
 	for (runOnce || daemon) && err == nil {
-		szlog.Infof("Starting in: %v", sleepBetweenRuns)
+		szlog.Say1f("Starting in: %v\n", sleepBetweenRuns)
 		time.Sleep(sleepBetweenRuns)
 		startTime = time.Now().Truncate(time.Millisecond)
 		runOnce = false

@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ func TestInternalTrim_ProcessPurge_FailureAfterSuccess(t *testing.T) {
 
 	chk.Log()
 	chk.Stdout(
-		"Purging snapshot: " + fmtTS(dirToDelete),
+		"*Purged snapshot: " + fmtTS(dirToDelete),
 	)
 }
 
@@ -153,7 +153,7 @@ func TestInternalTrim_ProcessPurge_Success(t *testing.T) {
 
 	chk.Log()
 	chk.Stdout(
-		"Purging snapshot: "+fmtTS(dirToDelete),
+		"*Purged snapshot: "+fmtTS(dirToDelete),
 		"Keeping snapshot: "+fmtTS(dirToKeep),
 	)
 }

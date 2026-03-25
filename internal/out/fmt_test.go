@@ -85,12 +85,12 @@ func TestOut_Print(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	szlog.SetLevel(szlog.LevelError)
+	szlog.SetVerbose(0)
 
 	out.Print("This line will not be displayed")
 	out.Printf("This %s will not be displayed", "formatted line")
 
-	szlog.SetLevel(szlog.LevelAll)
+	szlog.SetVerbose(1)
 
 	out.Print("This line will be displayed\n")
 	out.Printf("This %s will be displayed\n", "formatted line")
