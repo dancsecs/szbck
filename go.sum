@@ -6,5 +6,7 @@ github.com/dancsecs/sztest v0.1.7 h1:se+e5k/XCszKIjA2E7EVccfjlbyw0rqhAm/Gw93Qf6A
 github.com/dancsecs/sztest v0.1.7/go.mod h1:3j1h9eWcBMjCAVUZ4MoI/Y/wSVgMAIQPwqiKmK6jmmo=
 github.com/dancsecs/sztestlog v0.0.14 h1:A/MCCCZGbZoEYnMiEpdNNr4BLgCUItlsorwmEaeMCYQ=
 github.com/dancsecs/sztestlog v0.0.14/go.mod h1:Szkb4EbzN2DHWWusWRIiEzxTq5g+zObFZeyXsGkXhIM=
+golang.org/x/sys v0.42.0 h1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=
+golang.org/x/sys v0.42.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
 golang.org/x/text v0.28.0 h1:rhazDwis8INMIwQ4tpjLDzUhx6RlXqZNPEM0huQojng=
 golang.org/x/text v0.28.0/go.mod h1:U8nCwOR8jO/marOQ0QbDiOngZVEBB7MAiitBuMjXiNU=
