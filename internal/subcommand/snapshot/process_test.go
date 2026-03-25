@@ -133,13 +133,9 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
-		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
+		"I:Starting in: 1ns",
 	)
 
 	chk.Stdout(
@@ -148,8 +144,11 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 			" "+"--delete"+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
-		"snapshot successful\n"+
-			"Before: 8,192 After: 12,312 Used: 4,120 bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 }
 
@@ -170,13 +169,9 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -185,8 +180,11 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 			" "+rsync.FlgDryRun+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
-		"snapshot successful (DRY RUN)\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful (DRY RUN)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 }
 
@@ -209,18 +207,10 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -228,8 +218,11 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 			" "+rsync.FlgDelete+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -237,8 +230,11 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 			filepath.Join(trg, target.LatestDirectoryLink)+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 }
 
@@ -263,18 +259,10 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -282,8 +270,11 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 			" "+rsync.FlgDelete+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -291,8 +282,11 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 			filepath.Join(trg, target.LatestDirectoryLink)+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 }
 
@@ -319,10 +313,8 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
 	)
 	chk.Stdout(

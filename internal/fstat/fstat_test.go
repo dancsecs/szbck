@@ -53,7 +53,7 @@ func TestStatfs_Tmp(t *testing.T) {
 	chk.NoErr(err)
 	chk.NotNil(statfs)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 
 	chk.Str(
 		statfs.Status(),

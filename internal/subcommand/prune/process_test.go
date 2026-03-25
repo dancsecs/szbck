@@ -200,19 +200,17 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	chk.Log()
 	chk.Stdout(
 		"Purging oldest backup (DRY RUN)",
 		"",
 		"Purging backup: "+dirToDelete,
-		"purge successful (DRY RUN)\n"+
-			"Before: # After: # Total Recovered: # bytes",
+		"prune successful (DRY RUN)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
 }
@@ -232,19 +230,17 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	chk.Log()
 	chk.Stdout(
 		"Purging oldest backup",
 		"",
 		"Purging backup: "+dirToDelete,
-		"purge successful\n"+
-			"Before: # After: # Total Recovered: # bytes",
+		"prune successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
 }
@@ -265,19 +261,17 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	chk.Log()
 	chk.Stdout(
 		"Purging oldest backup",
 		"",
 		"Purging backup: "+dirToDelete,
-		"purge successful\n"+
-			"Before: # After: # Total Recovered: # bytes",
+		"prune successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
 }
@@ -301,20 +295,18 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	chk.Log()
 	chk.Stdout(
 		"Purging 2 oldest backups",
 		"",
 		"Purging backup: "+dirToDelete1,
 		"Purging backup: "+dirToDelete2,
-		"purge successful\n"+
-			"Before: # After: # Total Recovered: # bytes",
+		"prune successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
 }
@@ -370,20 +362,18 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	chk.Log()
 	chk.Stdout(
 		"Purging 2 oldest backups",
 		"",
 		"Purging backup: "+dirToDelete1,
 		"Purging backup: "+dirToDelete2,
-		"purge successful\n"+
-			"Before: # After: # Total Recovered: # bytes",
+		"prune successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
 }

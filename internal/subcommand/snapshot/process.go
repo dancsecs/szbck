@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"github.com/dancsecs/szargs"
-	"github.com/dancsecs/szbck/internal/du"
+	"github.com/dancsecs/szbck/internal/fstat"
 	"github.com/dancsecs/szbck/internal/out"
 	"github.com/dancsecs/szbck/internal/rsync"
 	"github.com/dancsecs/szbck/internal/settings"
@@ -106,8 +106,7 @@ func Process(args *szargs.Args) (string, error) {
 		hasLatest      bool
 		linkDest       string
 		newDir         string
-		beforeBytes    int64
-		afterBytes     int64
+		fsStat         *fstat.StatFS
 		err            error
 		startTime      time.Time
 	)
@@ -115,7 +114,7 @@ func Process(args *szargs.Args) (string, error) {
 	cfg, dryRunMsg, trimAfter, daemon, err = parseArgs(args)
 
 	if err == nil {
-		beforeBytes, err = du.Total(cfg.Target.GetPath())
+		fsStat, err = fstat.New(cfg.Target.GetPath())
 	}
 
 	runOnce := true
@@ -160,22 +159,14 @@ func Process(args *szargs.Args) (string, error) {
 				out.Int(int64(totalPurged)) + ")"
 		}
 
+		//nolint:forbidigo // Ok.
 		if err == nil {
-			afterBytes, err = du.Total(cfg.Target.GetPath())
-		}
-
-		if err == nil {
-			out.Printf(
-				"snapshot successful%s%s\n"+
-					"Before: %s After: %s Used: %s bytes\n",
+			fmt.Printf("snapshot successful%s%s\nSyncing...\n",
 				purgedMsg,
 				dryRunMsg,
-				out.Int(beforeBytes),
-				out.Int(afterBytes),
-				out.Int(afterBytes-beforeBytes),
 			)
-
-			beforeBytes = afterBytes
+			fmt.Println(fsStat.Delta())
+			fsStat, err = fstat.New(cfg.Target.GetPath())
 		}
 
 		sleepBetweenRuns = NextHourIn(time.Since(startTime))

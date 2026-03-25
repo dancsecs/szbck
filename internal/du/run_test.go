@@ -87,7 +87,7 @@ func TestDuRun_EmptyDirectory(t *testing.T) {
 
 	chk.NoErr(err)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Str(out, "#\t"+dir+"\n")
 
 	chk.Log()

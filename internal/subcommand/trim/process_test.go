@@ -203,10 +203,7 @@ func TestTrim_Process_EmptyBackupDir(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
-	)
+	chk.Log()
 }
 
 func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
@@ -234,10 +231,7 @@ func TestTrim_Process_OnlyOneBackupDir(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.Log()
 }
 
 func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
@@ -276,10 +270,7 @@ func TestTrim_Process_OnlyOneInvalidBackupDir(t *testing.T) {
 	chk.Str(outText, "")
 
 	chk.AddSub(`\d+`, "#")
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.Log()
 }
 
 func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
@@ -304,20 +295,18 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
-		"trim successful (Purged: 0) (DRY RUN)\n"+
-			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
+		"trim successful (Purged: 0) (DRY RUN)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.Log()
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
@@ -342,20 +331,18 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
-		"trim successful (Purged: 0) (DRY RUN)\n"+
-			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
+		"trim successful (Purged: 0) (DRY RUN)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.Log()
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
@@ -377,20 +364,18 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Stdout(
 		"Keeping snapshot: "+fmtTS(snap1),
 		"Keeping snapshot: "+fmtTS(snap2),
-		"trim successful (Purged: 0)\n"+
-			"Before: 12,312 After: 12,312 Total Recovered: 0 bytes",
+		"trim successful (Purged: 0)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.Log()
 }
 
 func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
@@ -418,20 +403,18 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Stdout(
 		"Purging snapshot: "+fmtTS(purge1),
 		"Purging snapshot: "+fmtTS(purge2),
 		"Keeping snapshot: "+fmtTS(keep3),
 		"Keeping snapshot: "+fmtTS(keepRoot),
-		"trim successful (Purged: 2)\n"+
-			"Before: 20,504 After: 12,312 Total Recovered: 8,192 bytes",
+		"trim successful (Purged: 2)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 	chk.Stderr()
-	chk.Log(
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-		"I:Calculating size of dir: ("+trgDir+")...",
-		"I:... Calculated size of dir: ("+trgDir+") = #",
-	)
+	chk.Log()
 }

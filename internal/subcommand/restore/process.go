@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ func Process(args *szargs.Args) (string, error) {
 	}
 
 	if err == nil {
-		return "restore successful", nil
+		return "restore successful\n", nil
 	}
 
 	return "", fmt.Errorf("%w: %w", ErrRestoreError, err)

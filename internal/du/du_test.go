@@ -64,7 +64,7 @@ func TestDu_Total_EmptyDirectory(t *testing.T) {
 	_, err := du.Total(dir)
 	chk.NoErr(err)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+dir+")...",
 		"I:... Calculated size of dir: ("+dir+") = #",
@@ -81,7 +81,7 @@ func TestDu_Total_OneFile(t *testing.T) {
 	_, err := du.Total(dir)
 	chk.NoErr(err)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
 		"I:Calculating size of dir: ("+dir+")...",
 		"I:... Calculated size of dir: ("+dir+") = #",

@@ -258,7 +258,7 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 	outText, err := status.Process(args)
 	chk.NoErr(err)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 
 	chk.StrSlice(
 		strings.Split(outText, "\n"),
@@ -297,7 +297,7 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 	outText, err := status.Process(args)
 	chk.NoErr(err)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.StrSlice(
 		strings.Split(outText, "\n"),
 		[]string{

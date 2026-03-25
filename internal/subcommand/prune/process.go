@@ -1,6 +1,6 @@
 /*
    Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2025-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import (
 	"strconv"
 
 	"github.com/dancsecs/szargs"
-	"github.com/dancsecs/szbck/internal/du"
+	"github.com/dancsecs/szbck/internal/fstat"
 	"github.com/dancsecs/szbck/internal/out"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/target"
@@ -140,8 +140,7 @@ func Process(args *szargs.Args) (string, error) {
 		numToDel     int
 		cfg          *settings.Config
 		matchingDirs []string
-		beforeBytes  int64
-		afterBytes   int64
+		fsStat       *fstat.StatFS
 		err          error
 	)
 
@@ -159,26 +158,19 @@ func Process(args *szargs.Args) (string, error) {
 	}
 
 	if err == nil {
-		beforeBytes, err = du.Total(cfg.Target.GetPath())
+		fsStat, err = fstat.New(cfg.Target.GetPath())
 	}
 
 	if err == nil {
 		err = pruneDirectories(numToDel, matchingDirs, dryRun)
 	}
 
+	//nolint:forbidigo // Ok.
 	if err == nil {
-		afterBytes, err = du.Total(cfg.Target.GetPath())
-	}
-
-	if err == nil {
-		out.Printf(
-			"purge successful%s\n"+
-				"Before: %s After: %s Total Recovered: %s bytes\n",
+		fmt.Printf("prune successful%s\nSyncing...\n",
 			dryRun,
-			out.Int(beforeBytes),
-			out.Int(afterBytes),
-			out.Int(beforeBytes-afterBytes),
 		)
+		fmt.Println(fsStat.Delta())
 
 		return "", nil
 	}

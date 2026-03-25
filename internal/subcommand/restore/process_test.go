@@ -213,7 +213,7 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
 	chk.NoErr(os.Remove(file))
 
@@ -231,15 +231,11 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -248,8 +244,11 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -284,7 +283,7 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
 	chk.NoErr(os.Remove(file))
 
@@ -292,15 +291,11 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -309,8 +304,11 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -345,7 +343,7 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
 	chk.NoErr(os.Remove(file))
 
@@ -353,15 +351,11 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -370,8 +364,11 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -424,7 +421,7 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
 	chk.NoErr(os.Remove(fileSub1))
 	chk.NoErr(os.Remove(fileSub2))
@@ -443,7 +440,7 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 	outText, err = restore.Process(args)
 
 	chk.NoErr(err)
-	chk.Str(outText, "restore successful")
+	chk.Str(outText, "restore successful\n")
 
 	_, err = os.Stat(fileSub1) // deleted and not restored
 	chk.Err(
@@ -456,14 +453,10 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 	_, err = os.Stat(fileSub2) // deleted and restored
 	chk.NoErr(err)
 
-	chk.AddSub(`[\d\,]+`, "#")
+	chk.AddSub(`\-?\d[\d\,]*`, "#")
 
 	chk.Log(
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 		"I:Starting in: #ns",
-		"I:Calculating size of dir: ("+trg+")...",
-		"I:... Calculated size of dir: ("+trg+") = #",
 	)
 	chk.Stdout(
 		"Running command: "+
@@ -472,8 +465,11 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#.szb")+
 			"",
-		"snapshot successful\n"+
-			"Before: # After: # Used: # bytes",
+		"snapshot successful",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
