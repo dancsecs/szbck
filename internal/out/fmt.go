@@ -33,6 +33,11 @@ func Int(n int64) string {
 	return printer.Sprintf("%d", n)
 }
 
+// Uint returns the number formatted with local separators.
+func Uint(n uint64) string {
+	return printer.Sprintf("%d", n)
+}
+
 // Pct returns the number formatted as a percent with local separators.
 func Pct(n float64) string {
 	return printer.Sprintf("%.2f", n*100.0) + "%" //nolint:mnd  // Ok.

@@ -46,6 +46,21 @@ func TestFormat_Int(t *testing.T) {
 	)
 }
 
+func TestFormat_Uint(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	chk.Str(
+		out.Uint(0),
+		"0",
+	)
+
+	chk.Str(
+		out.Uint(3567823256),
+		"3,567,823,256",
+	)
+}
+
 func TestFormat_Pct(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
