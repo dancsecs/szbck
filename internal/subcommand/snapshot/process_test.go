@@ -30,7 +30,6 @@ import (
 	"github.com/dancsecs/szbck/internal/rsync"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/snapshot"
-	"github.com/dancsecs/szbck/internal/subcommand/trim"
 	"github.com/dancsecs/szbck/internal/target"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
@@ -299,14 +298,15 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	)
 	outText, err := snapshot.Process(args)
 
-	chk.Err(
-		err,
-		""+
-			snapshot.ErrSnapshotError.Error()+
-			" (Total Purged: 0): "+
-			trim.ErrOnlyLatest.Error()+
-			"",
-	)
+	chk.NoErr(err)
+	// chk.Err(
+	// 	err,
+	// 	""+
+	// 		snapshot.ErrSnapshotError.Error()+
+	// 		" (Total Purged: 0): "+
+	// 		trim.ErrOnlyLatest.Error()+
+	// 		"",
+	// )
 	chk.Str(outText, "")
 
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
@@ -318,5 +318,10 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 			" "+rsync.FlgDelete+
 			" "+source+
 			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+		"snapshot successful (Purged: 0)",
+		"Syncing...",
+		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
 	)
 }

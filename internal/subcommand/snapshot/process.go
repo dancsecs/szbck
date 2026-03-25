@@ -19,6 +19,7 @@
 package snapshot
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -153,6 +154,11 @@ func Process(args *szargs.Args) (string, error) {
 
 		if err == nil && trimAfter {
 			purgedCount, err = trim.PurgeSnapshots(cfg, time.Now(), dryRunMsg)
+			if errors.Is(err, trim.ErrNoBackups) ||
+				errors.Is(err, trim.ErrOnlyLatest) {
+				err = nil
+			}
+
 			purgedMsg = " (Purged: " + out.Int(int64(purgedCount)) + ")"
 			totalPurged += purgedCount
 			totalPurgedMsg = " (Total Purged: " +
