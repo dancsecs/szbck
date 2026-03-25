@@ -124,10 +124,10 @@ func Process(args *szargs.Args) (string, error) {
 	for (runOnce || daemon) && err == nil {
 		szlog.Say1f("Starting in: %v\n", sleepBetweenRuns)
 		time.Sleep(sleepBetweenRuns)
-		startTime = time.Now().Truncate(time.Millisecond)
+		startTime = time.Now()
 		runOnce = false
 
-		newDir, err = cfg.Target.Create(time.Now(), initialBackupDirPerm)
+		newDir, err = cfg.Target.Create(startTime, initialBackupDirPerm)
 
 		if err == nil {
 			hasLatest, err = cfg.Target.HasLatest()
