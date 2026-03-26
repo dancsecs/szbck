@@ -36,15 +36,16 @@ import (
 const initialBackupDirPerm = 0o0700
 
 // NextHourIn returns the time to wait for the start of the next hour.  If
-// elapsed is >= 31 minutes than an extra hour is added to the delay.
-func NextHourIn(elapsed time.Duration) time.Duration {
-	timeToNextTime := time.Hour - elapsed
+// the time to next run < 5 minutes than an extra hour is added to the delay.
+func NextHourIn(lastStartTime, from time.Time) time.Duration {
+	nextStartAt := lastStartTime.Truncate(time.Minute).Add(time.Hour)
+	timeToNextStart := nextStartAt.Sub(from)
 
-	for timeToNextTime < time.Minute*31 {
-		timeToNextTime += time.Hour
+	for timeToNextStart < time.Minute*5 {
+		timeToNextStart += time.Hour
 	}
 
-	return timeToNextTime
+	return timeToNextStart
 }
 
 func parseArgs(
@@ -175,7 +176,7 @@ func Process(args *szargs.Args) (string, error) {
 			fsStat, err = fstat.New(cfg.Target.GetPath())
 		}
 
-		sleepBetweenRuns = NextHourIn(time.Since(startTime))
+		sleepBetweenRuns = NextHourIn(startTime, time.Now())
 	}
 
 	if err == nil {

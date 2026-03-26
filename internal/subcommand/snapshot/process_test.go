@@ -97,9 +97,30 @@ func TestSnapshotProcess_NextHourIn(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	chk.Dur(snapshot.NextHourIn(0), time.Hour)
-	chk.Dur(snapshot.NextHourIn(time.Minute*31), time.Hour+time.Minute*29)
-	chk.Dur(snapshot.NextHourIn(time.Minute*29), time.Minute*31)
+	startTime := time.Date(2026, time.May, 15, 10, 22, 1, 2, time.Local)
+
+	chk.Dur(
+		snapshot.NextHourIn(
+			startTime,
+			startTime,
+		),
+		time.Minute*59+time.Second*58+time.Nanosecond*999999998,
+	)
+	chk.Dur(
+		snapshot.NextHourIn(
+			startTime,
+			startTime.Add(time.Minute*2+time.Second*59+time.Millisecond*105),
+		),
+		time.Minute*56+time.Second*59+time.Nanosecond*894999998,
+	)
+
+	chk.Dur(
+		snapshot.NextHourIn(
+			startTime,
+			startTime.Add(time.Minute*56+time.Second*41+time.Millisecond*805),
+		),
+		time.Hour+time.Minute*3+time.Second*17+time.Nanosecond*194999998,
+	)
 }
 
 func TestSnapshotProcess_MissingArgs(t *testing.T) {
