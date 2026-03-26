@@ -20,7 +20,7 @@ package snapshot
 
 // HelpText describes the overall operation of the utility.
 const HelpText = `{s | snap | snapshot} ` +
-	`[--dry-run] [--daemon] [--trim] [-t target] config.szb
+	`[--dry-run] [--daemon [--at minute]] [--trim] [-t target] config.szb
 
 Create a new snapshot of the source listed in the configuration file located
 in the target directory.
@@ -31,6 +31,12 @@ in the target directory.
 
    [--daemon]
       Runs in a loop creating a snapshot every hour and sleeping between runs.
+
+   [--at minute]
+      If daemon mode is enabled this specifies the minute after the hour the
+      snapshot should start otherwise the current time's minute value will be
+      used.  Valid values are between 0-59.  An unexpected argument error will
+      occur if specified without --daemon being specified.  
 
    [--trim]
       Executes the retention policy as specified in the configuration file

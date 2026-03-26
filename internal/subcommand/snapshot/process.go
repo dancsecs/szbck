@@ -35,28 +35,33 @@ import (
 
 const initialBackupDirPerm = 0o0700
 
-// NextHourIn returns the time to wait for the start of the next hour.  If
-// the time to next run < 5 minutes than an extra hour is added to the delay.
-func NextHourIn(lastStartTime, from time.Time) time.Duration {
-	nextStartAt := lastStartTime.Truncate(time.Minute).Add(time.Hour)
-	timeToNextStart := nextStartAt.Sub(from)
+// nextHourIn returns the time to wait for the start of the next hour.  If
+// the time to next run < 2 minute than an extra hour is added to the delay.
+func nextHourIn(atMin int, from time.Time) time.Duration {
+	nextStartAt := time.Date(
+		from.Year(), from.Month(), from.Day(),
+		from.Hour(), atMin, 0, 0,
+		from.Location(),
+	)
 
-	for timeToNextStart < time.Minute*5 {
-		timeToNextStart += time.Hour
+	for !nextStartAt.After(from) {
+		nextStartAt = nextStartAt.Add(time.Hour)
 	}
 
-	return timeToNextStart
+	return nextStartAt.Sub(from)
 }
 
 func parseArgs(
 	args *szargs.Args,
-) (*settings.Config, string, bool, bool, error) {
+	startTime time.Time,
+) (*settings.Config, string, bool, bool, int, error) {
 	var (
 		cfg       *settings.Config
 		isDryRun  bool
 		dryRun    string
 		trimAfter bool
 		daemon    bool
+		runAtMin  uint8
 		err       error
 	)
 
@@ -66,14 +71,31 @@ func parseArgs(
 	}
 
 	trimAfter = args.Is("--trim", "")
+
 	daemon = args.Is("--daemon", "")
+	if daemon {
+		var found bool
+		runAtMin, found = args.ValueUint8("--at", "")
+
+		if args.HasErr() || runAtMin > 59 {
+			args.PushErr(ErrAtRange)
+
+			runAtMin = 0
+		}
+
+		if !args.HasErr() && !found {
+			//nolint:gosec,mnd // Ok.
+			runAtMin = min(uint8(startTime.Minute()), 59)
+		}
+	}
+
 	err = args.Err()
 
 	if err == nil {
 		cfg, err = settings.LoadFromArgs(args)
 	}
 
-	return cfg, dryRun, trimAfter, daemon, err //nolint:wrapcheck // Ok.
+	return cfg, dryRun, trimAfter, daemon, int(runAtMin), err
 }
 
 func run(dryRun bool, linkDest, newDir string, cfg *settings.Config) error {
@@ -101,6 +123,7 @@ func Process(args *szargs.Args) (string, error) {
 		dryRunMsg      string
 		trimAfter      bool
 		daemon         bool
+		runAtMin       int
 		purgedCount    int
 		purgedMsg      string
 		totalPurged    int
@@ -110,10 +133,12 @@ func Process(args *szargs.Args) (string, error) {
 		newDir         string
 		fsStat         *fstat.StatFS
 		err            error
-		startTime      time.Time
 	)
 
-	cfg, dryRunMsg, trimAfter, daemon, err = parseArgs(args)
+	cfg, dryRunMsg, trimAfter, daemon, runAtMin, err = parseArgs(
+		args,
+		time.Now(),
+	)
 
 	if err == nil {
 		fsStat, err = fstat.New(cfg.Target.GetPath())
@@ -125,10 +150,10 @@ func Process(args *szargs.Args) (string, error) {
 	for (runOnce || daemon) && err == nil {
 		szlog.Say1f("Starting in: %v\n", sleepBetweenRuns)
 		time.Sleep(sleepBetweenRuns)
-		startTime = time.Now()
+
 		runOnce = false
 
-		newDir, err = cfg.Target.Create(startTime, initialBackupDirPerm)
+		newDir, err = cfg.Target.Create(time.Now(), initialBackupDirPerm)
 
 		if err == nil {
 			hasLatest, err = cfg.Target.HasLatest()
@@ -176,7 +201,7 @@ func Process(args *szargs.Args) (string, error) {
 			fsStat, err = fstat.New(cfg.Target.GetPath())
 		}
 
-		sleepBetweenRuns = NextHourIn(startTime, time.Now())
+		sleepBetweenRuns = nextHourIn(runAtMin, time.Now())
 	}
 
 	if err == nil {

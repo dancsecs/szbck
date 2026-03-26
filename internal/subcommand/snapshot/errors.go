@@ -24,6 +24,9 @@ import (
 
 // Snapshot errors.
 var (
-	ErrSnapshotError    = errors.New("snapshot error")
+	ErrSnapshotError = errors.New("snapshot error")
+	ErrAtRange       = errors.New(
+		"daemon at range must be between 0 and 59 inclusively",
+	)
 	ErrTrimNotImplement = errors.New("trim retention not yet implemented")
 )
