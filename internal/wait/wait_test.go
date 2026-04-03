@@ -26,6 +26,8 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
+const clearLine = "                    "
+
 func TestSnapshotProcess_NextHourIn(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
@@ -80,8 +82,10 @@ func TestSnapshotProcess_WaitTill(t *testing.T) {
 
 	chk.AddSub(`\-?\d[\d\,\.]*(?:s|ms|µs|ns)?`, "#")
 	chk.Stdout(
-		"Starting 'Timer Title (500ms)' at ### #:#:# in: #",
-		"Restarted 'Timer Title (500ms)' at: ### #:#:# TargetDelta: #",
+		"Starting 'Timer Title (500ms)' at ### #:#:# in: #"+
+			clearLine,
+		"Restarted 'Timer Title (500ms)' at: ### #:#:# TargetDelta: #"+
+			clearLine,
 	)
 }
 
@@ -94,14 +98,14 @@ func TestSnapshotProcess_WaitTillMonitor(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,\.]*(?:s|ms|µs|ns)?`, "#")
 	chk.Stdout(
 		"" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
 			"Restarted 'Timer Title' at: ### #:#:# TargetDelta: #" +
-			"                         ",
+			clearLine,
 	)
 }

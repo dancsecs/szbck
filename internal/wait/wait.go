@@ -24,6 +24,8 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
+const clearLine = "                    "
+
 // NextHourAt returns the time adjusted to the atMin time after the hour.
 func NextHourAt(atMin int, from time.Time) time.Time {
 	nextStartAt := time.Date(
@@ -54,12 +56,20 @@ func Until(title string, monitor bool, targetTime time.Time) {
 	for maxSleep > 0 {
 		if !monitor {
 			szlog.Say1f(
-				"Starting '%s' at %s in: %v\n", title, targetTimeStr, maxSleep,
+				"Starting '%s' at %s in: %v%s\n",
+				title,
+				targetTimeStr,
+				maxSleep,
+				clearLine,
 			)
 			time.Sleep(maxSleep)
 		} else {
 			szlog.Say0f(
-				"Starting '%s' at %s in: %v\r", title, targetTimeStr, maxSleep,
+				"Starting '%s' at %s in: %v%s\r",
+				title,
+				targetTimeStr,
+				maxSleep,
+				clearLine,
 			)
 
 			switch {
@@ -79,17 +89,19 @@ func Until(title string, monitor bool, targetTime time.Time) {
 	now = time.Now()
 	if monitor {
 		szlog.Say0f(
-			"Restarted '%s' at: %s TargetDelta: %v                         \n",
+			"Restarted '%s' at: %s TargetDelta: %v%s\n",
 			title,
 			now.Format("2006-01-02 15:04:05.999"),
 			now.Sub(targetTime),
+			clearLine,
 		)
 	} else {
 		szlog.Say1f(
-			"Restarted '%s' at: %s TargetDelta: %v\n",
+			"Restarted '%s' at: %s TargetDelta: %v%s\n",
 			title,
 			now.Format("2006-01-02 15:04:05.999"),
 			now.Sub(targetTime),
+			clearLine,
 		)
 	}
 }
