@@ -24,10 +24,8 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-const initialBackupDirPerm = 0o0700
-
-// nextHourAt returns the time adjusted to the atMin time after the hour.
-func nextHourAt(atMin int, from time.Time) time.Time {
+// NextHourAt returns the time adjusted to the atMin time after the hour.
+func NextHourAt(atMin int, from time.Time) time.Time {
 	nextStartAt := time.Date(
 		from.Year(), from.Month(), from.Day(),
 		from.Hour(), atMin, 0, 0,

@@ -26,6 +26,39 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
+func TestSnapshotProcess_NextHourIn(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	const minute = 22
+
+	startTime := time.Date(2026, time.May, 15, 10, minute, 0, 0, time.Local)
+
+	chk.Dur(
+		wait.NextHourAt(
+			minute,
+			startTime,
+		).Sub(startTime),
+		time.Hour,
+	)
+
+	chk.Dur(
+		wait.NextHourAt(
+			minute,
+			startTime.Add(time.Nanosecond),
+		).Sub(startTime),
+		time.Hour,
+	)
+
+	chk.Dur(
+		wait.NextHourAt(
+			minute,
+			startTime.Add(time.Hour+time.Nanosecond*999999999),
+		).Sub(startTime),
+		time.Hour*2,
+	)
+}
+
 func TestSnapshotProcess_WaitTillNow(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
