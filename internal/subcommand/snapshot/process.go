@@ -30,31 +30,18 @@ import (
 	"github.com/dancsecs/szbck/internal/rsync"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/subcommand/trim"
-	"github.com/dancsecs/szlog"
+	"github.com/dancsecs/szbck/internal/wait"
 )
 
 const initialBackupDirPerm = 0o0700
 
-// nextHourIn returns the time to wait for the start of the next hour.  If
-// the time to next run < 2 minute than an extra hour is added to the delay.
-func nextHourIn(atMin int, from time.Time) time.Duration {
-	nextStartAt := time.Date(
-		from.Year(), from.Month(), from.Day(),
-		from.Hour(), atMin, 0, 0,
-		from.Location(),
-	)
-
-	for !nextStartAt.After(from) {
-		nextStartAt = nextStartAt.Add(time.Hour)
-	}
-
-	return nextStartAt.Sub(from)
-}
-
+//nolint:nestif,cyclop,funlen // Ok.
 func parseArgs(
 	args *szargs.Args,
 	startTime time.Time,
-) (*settings.Config, string, bool, bool, int, error) {
+) (*settings.Config, string, bool, bool, int, bool, error) {
+	const maxMinute = 59
+
 	var (
 		cfg       *settings.Config
 		isDryRun  bool
@@ -62,6 +49,8 @@ func parseArgs(
 		trimAfter bool
 		daemon    bool
 		runAtMin  uint8
+		foundAt   bool
+		monitor   bool
 		err       error
 	)
 
@@ -73,19 +62,35 @@ func parseArgs(
 	trimAfter = args.Is("--trim", "")
 
 	daemon = args.Is("--daemon", "")
-	if daemon {
-		var found bool
-		runAtMin, found = args.ValueUint8("--at", "")
 
-		if args.HasErr() || runAtMin > 59 {
-			args.PushErr(ErrAtRange)
+	monitor = args.Is("--monitor", "")
 
-			runAtMin = 0
-		}
+	runAtMin, foundAt = args.ValueUint8("--at", "")
 
-		if !args.HasErr() && !found {
-			//nolint:gosec,mnd // Ok.
-			runAtMin = min(uint8(startTime.Minute()), 59)
+	if !args.HasErr() {
+		if !daemon {
+			if foundAt {
+				runAtMin = 0
+
+				args.PushErr(ErrAtUsage)
+			}
+
+			if monitor {
+				monitor = false
+
+				args.PushErr(ErrMonitorUsage)
+			}
+		} else {
+			if errors.Is(args.Err(), szargs.ErrRange) || runAtMin > maxMinute {
+				args.PushErr(ErrAtRange)
+
+				runAtMin = 0
+			}
+
+			if !args.HasErr() && !foundAt {
+				//nolint:gosec // Ok. Daemon defaulting to current minute.
+				runAtMin = min(uint8(startTime.Minute()), maxMinute)
+			}
 		}
 	}
 
@@ -95,7 +100,7 @@ func parseArgs(
 		cfg, err = settings.LoadFromArgs(args)
 	}
 
-	return cfg, dryRun, trimAfter, daemon, int(runAtMin), err
+	return cfg, dryRun, trimAfter, daemon, int(runAtMin), monitor, err
 }
 
 func run(dryRun bool, linkDest, newDir string, cfg *settings.Config) error {
@@ -124,6 +129,7 @@ func Process(args *szargs.Args) (string, error) {
 		trimAfter      bool
 		daemon         bool
 		runAtMin       int
+		monitor        bool
 		purgedCount    int
 		purgedMsg      string
 		totalPurged    int
@@ -135,7 +141,7 @@ func Process(args *szargs.Args) (string, error) {
 		err            error
 	)
 
-	cfg, dryRunMsg, trimAfter, daemon, runAtMin, err = parseArgs(
+	cfg, dryRunMsg, trimAfter, daemon, runAtMin, monitor, err = parseArgs(
 		args,
 		time.Now(),
 	)
@@ -145,11 +151,10 @@ func Process(args *szargs.Args) (string, error) {
 	}
 
 	runOnce := true
-	sleepBetweenRuns := time.Nanosecond
+	targetRunTime := time.Now()
 
 	for (runOnce || daemon) && err == nil {
-		szlog.Say1f("Starting in: %v\n", sleepBetweenRuns)
-		time.Sleep(sleepBetweenRuns)
+		wait.Until("Next Backup", monitor, targetRunTime)
 
 		runOnce = false
 
@@ -201,7 +206,7 @@ func Process(args *szargs.Args) (string, error) {
 			fsStat, err = fstat.New(cfg.Target.GetPath())
 		}
 
-		sleepBetweenRuns = nextHourIn(runAtMin, time.Now())
+		targetRunTime = wait.NextHourAt(runAtMin, time.Now())
 	}
 
 	if err == nil {

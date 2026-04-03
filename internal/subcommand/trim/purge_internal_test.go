@@ -44,7 +44,7 @@ func fmtTS(fName string) string {
 		time.Local,
 	)
 
-	return fName + ": " + fileTime.Format(time.RFC850)
+	return fName + ": " + fileTime.Format(time.RFC1123Z)
 }
 
 func TestInternalTrim_ProcessPurge_RootPermissionFailure(t *testing.T) {
@@ -120,7 +120,7 @@ func TestInternalTrim_ProcessPurge_FailureAfterSuccess(t *testing.T) {
 
 	chk.Log()
 	chk.Stdout(
-		"*Purged snapshot: " + fmtTS(dirToDelete),
+		"*Purged snapshot: " + fmtTS(dirToDelete) + " **",
 	)
 }
 
@@ -153,7 +153,7 @@ func TestInternalTrim_ProcessPurge_Success(t *testing.T) {
 
 	chk.Log()
 	chk.Stdout(
-		"*Purged snapshot: "+fmtTS(dirToDelete),
+		"*Purged snapshot: "+fmtTS(dirToDelete)+" **",
 		"Keeping snapshot: "+fmtTS(dirToKeep),
 	)
 }

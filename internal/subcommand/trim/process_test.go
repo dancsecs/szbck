@@ -143,7 +143,7 @@ func fmtTS(fName string) string {
 		time.Local,
 	)
 
-	return fName + ": " + fileTime.Format(time.RFC850)
+	return fName + ": " + fileTime.Format(time.RFC1123Z)
 }
 
 func TestTrim_Process_NoArgs(t *testing.T) {
@@ -405,8 +405,8 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Stdout(
-		"*Purged snapshot: "+fmtTS(purge1),
-		"*Purged snapshot: "+fmtTS(purge2),
+		"*Purged snapshot: "+fmtTS(purge1)+" **",
+		"*Purged snapshot: "+fmtTS(purge2)+" **",
 		"Keeping snapshot: "+fmtTS(keep3),
 		"Keeping snapshot: "+fmtTS(keepRoot),
 		"trim successful (Purged: 2)",

@@ -236,7 +236,6 @@ func TestRestoreProcess_FromLatestTargetDirectory(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -295,7 +294,6 @@ func TestRestoreProcess_FromBaseTargetDirectory(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -354,7 +352,6 @@ func TestRestoreProcess_DryRun_And_Keep(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -454,7 +451,6 @@ func TestRestoreProcess_SpecificDirectoryTree(t *testing.T) {
 
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+

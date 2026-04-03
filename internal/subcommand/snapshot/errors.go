@@ -28,5 +28,8 @@ var (
 	ErrAtRange       = errors.New(
 		"daemon at range must be between 0 and 59 inclusively",
 	)
+	ErrAtUsage      = errors.New("--at specified without --daemon")
+	ErrMonitorUsage = errors.New("--monitor specified without --daemon")
+
 	ErrTrimNotImplement = errors.New("trim retention not yet implemented")
 )

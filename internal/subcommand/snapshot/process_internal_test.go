@@ -27,45 +27,6 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
-func TestSnapshotProcess_NextHourIn(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	startTime := time.Date(2026, time.May, 15, 10, 22, 0, 0, time.Local)
-
-	chk.Dur(
-		nextHourIn(
-			22,
-			startTime,
-		),
-		time.Hour,
-	)
-
-	chk.Dur(
-		nextHourIn(
-			22,
-			startTime.Add(-time.Nanosecond),
-		),
-		time.Nanosecond,
-	)
-
-	chk.Dur(
-		nextHourIn(
-			22,
-			startTime.Add(time.Nanosecond),
-		),
-		time.Hour-time.Nanosecond,
-	)
-
-	chk.Dur(
-		nextHourIn(
-			22,
-			startTime.Add(time.Hour+time.Nanosecond*999999999),
-		),
-		time.Minute*59+time.Second*59+time.Nanosecond,
-	)
-}
-
 //nolint:dogsled,funlen // Ok.
 func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
@@ -73,7 +34,7 @@ func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 
 	startTime := time.Date(2026, time.May, 15, 10, 22, 0, 0, time.Local)
 
-	_, _, _, daemon, runAtMin, err := parseArgs(
+	_, _, _, daemon, runAtMin, monitor, err := parseArgs(
 		szargs.New(
 			"programDesc",
 			[]string{
@@ -83,16 +44,18 @@ func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 	)
 
 	chk.False(daemon)
+	chk.False(monitor)
 	chk.Int(runAtMin, 0)
 	chk.Err(
 		err,
 		chk.ErrChain(
-			szargs.ErrUnexpected,
-			"[MISSING_CONFIG_FILE]",
+			szargs.ErrInvalidUint8,
+			szargs.ErrSyntax,
+			"--at: 'MISSING_CONFIG_FILE'",
 		),
 	)
 
-	_, _, _, daemon, runAtMin, err = parseArgs(
+	_, _, _, daemon, runAtMin, monitor, err = parseArgs(
 		szargs.New(
 			"programDesc",
 			[]string{
@@ -102,6 +65,7 @@ func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 	)
 
 	chk.True(daemon)
+	chk.False(monitor)
 	chk.Int(runAtMin, 22)
 	chk.Err(
 		err,
@@ -112,7 +76,7 @@ func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 		),
 	)
 
-	_, _, _, daemon, runAtMin, err = parseArgs(
+	_, _, _, daemon, runAtMin, monitor, err = parseArgs(
 		szargs.New(
 			"programDesc",
 			[]string{
@@ -125,6 +89,7 @@ func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 	)
 
 	chk.True(daemon)
+	chk.False(monitor)
 	chk.Int(runAtMin, 0)
 	chk.Err(
 		err,
@@ -133,19 +98,63 @@ func TestSnapshotProcess_ParseArgDaemonAt(t *testing.T) {
 		),
 	)
 
-	_, _, _, daemon, runAtMin, err = parseArgs(
+	_, _, _, daemon, runAtMin, monitor, err = parseArgs(
+		szargs.New(
+			"programDesc",
+			[]string{
+				"programName",
+				"--at", "200",
+				"MISSING_CONFIG_FILE",
+			}),
+		startTime,
+	)
+
+	chk.False(daemon)
+	chk.False(monitor)
+	chk.Int(runAtMin, 0)
+	chk.Err(
+		err,
+		chk.ErrChain(
+			ErrAtUsage,
+		),
+	)
+
+	_, _, _, daemon, runAtMin, monitor, err = parseArgs(
+		szargs.New(
+			"programDesc",
+			[]string{
+				"programName",
+				"--monitor",
+				"MISSING_CONFIG_FILE",
+			}),
+		startTime,
+	)
+
+	chk.False(daemon)
+	chk.False(monitor)
+	chk.Int(runAtMin, 0)
+	chk.Err(
+		err,
+		chk.ErrChain(
+			ErrMonitorUsage,
+		),
+	)
+
+	_, _, _, daemon, runAtMin, monitor, err = parseArgs(
 		szargs.New(
 			"programDesc",
 			[]string{
 				"programName",
 				"--daemon",
 				"--at", "55",
+				"--monitor",
 				"MISSING_CONFIG_FILE",
 			}),
 		startTime,
 	)
 
 	chk.True(daemon)
+	chk.True(monitor)
 	chk.Int(runAtMin, 55)
 	chk.Err(
 		err,

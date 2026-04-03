@@ -126,7 +126,6 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 	chk.Log()
 
 	chk.Stdout(
-		"Starting in: 1ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+"--delete"+
@@ -160,7 +159,6 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -197,7 +195,6 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -208,7 +205,6 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
 		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
 		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -248,7 +244,6 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -259,7 +254,6 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
 		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
 		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
@@ -302,7 +296,6 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	chk.AddSub(`\-?\d[\d\,]*`, "#")
 	chk.Log()
 	chk.Stdout(
-		"Starting in: #ns",
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+

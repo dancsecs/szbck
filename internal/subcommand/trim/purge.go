@@ -49,11 +49,11 @@ func processPurge(
 		if err == nil {
 			if remove[i] {
 				out.Print("*Purged snapshot"+dryRun+": "+dir+": "+
-					tms[i].Format(time.RFC850), "\n",
+					tms[i].Format(time.RFC1123Z), " **\n",
 				)
 			} else {
 				out.Print("Keeping snapshot"+dryRun+": "+dir+": "+
-					tms[i].Format(time.RFC850), "\n",
+					tms[i].Format(time.RFC1123Z), "\n",
 				)
 			}
 		}
