@@ -46,7 +46,7 @@ func fmtTS(fName string) string {
 		time.Local,
 	)
 
-	return fName + ": " + fileTime.Format(time.RFC1123Z)
+	return fName + ": " + fileTime.Format(time.RFC1123)
 }
 
 func TestInternalTrim_ProcessPurge_RootPermissionFailure(t *testing.T) {
