@@ -63,7 +63,7 @@ func TestSnapshotProcess_WaitTillNow(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	wait.Until(false, time.Now())
+	wait.Until("Timer Title Now", false, time.Now())
 
 	chk.Stdout()
 }
@@ -72,12 +72,16 @@ func TestSnapshotProcess_WaitTill(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	wait.Until(false, time.Now().Add(time.Millisecond*500))
+	wait.Until(
+		"Timer Title (500ms)",
+		false,
+		time.Now().Add(time.Millisecond*500),
+	)
 
 	chk.AddSub(`\-?\d[\d\,\.]*(?:s|ms|µs|ns)?`, "#")
 	chk.Stdout(
-		"Next Backup at ### #:#:# in: #",
-		"Restarting at: ### #:#:# TargetDelta: #",
+		"Starting 'Timer Title (500ms)' at ### #:#:# in: #",
+		"Restarted 'Timer Title (500ms)' at: ### #:#:# TargetDelta: #",
 	)
 }
 
@@ -85,18 +89,19 @@ func TestSnapshotProcess_WaitTillMonitor(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	wait.Until(true, time.Now().Add(time.Second*11))
+	wait.Until("Timer Title", true, time.Now().Add(time.Second*11))
 
 	chk.AddSub(`\-?\d[\d\,\.]*(?:s|ms|µs|ns)?`, "#")
 	chk.Stdout(
 		"" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Next Backup at ### #:#:# in: #\r" +
-			"Restarting at: ### #:#:# TargetDelta: #                         ",
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Starting 'Timer Title' at ### #:#:# in: #\r" +
+			"Restarted 'Timer Title' at: ### #:#:# TargetDelta: #" +
+			"                         ",
 	)
 }

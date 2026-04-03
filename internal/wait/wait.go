@@ -41,7 +41,7 @@ func NextHourAt(atMin int, from time.Time) time.Time {
 
 // Until waits (sleeps) until the specified time displaying an updated
 // countdown if monitor is true.
-func Until(monitor bool, targetTime time.Time) {
+func Until(title string, monitor bool, targetTime time.Time) {
 	targetTimeStr := targetTime.Format("2006-01-02 15:04:05.999")
 
 	now := time.Now()
@@ -53,11 +53,13 @@ func Until(monitor bool, targetTime time.Time) {
 
 	for maxSleep > 0 {
 		if !monitor {
-			szlog.Say1f("Next Backup at %s in: %v\n", targetTimeStr, maxSleep)
+			szlog.Say1f(
+				"Starting '%s' at %s in: %v\n", title, targetTimeStr, maxSleep,
+			)
 			time.Sleep(maxSleep)
 		} else {
 			szlog.Say0f(
-				"Next Backup at %s in: %v\r", targetTimeStr, maxSleep,
+				"Starting '%s' at %s in: %v\r", title, targetTimeStr, maxSleep,
 			)
 
 			switch {
@@ -77,13 +79,15 @@ func Until(monitor bool, targetTime time.Time) {
 	now = time.Now()
 	if monitor {
 		szlog.Say0f(
-			"Restarting at: %s TargetDelta: %v                         \n",
+			"Restarted '%s' at: %s TargetDelta: %v                         \n",
+			title,
 			now.Format("2006-01-02 15:04:05.999"),
 			now.Sub(targetTime),
 		)
 	} else {
 		szlog.Say1f(
-			"Restarting at: %s TargetDelta: %v\n",
+			"Restarted '%s' at: %s TargetDelta: %v\n",
+			title,
 			now.Format("2006-01-02 15:04:05.999"),
 			now.Sub(targetTime),
 		)
