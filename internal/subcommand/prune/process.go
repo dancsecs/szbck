@@ -20,7 +20,6 @@ package prune
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
@@ -28,11 +27,10 @@ import (
 	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szbck/internal/fstat"
 	"github.com/dancsecs/szbck/internal/out"
+	"github.com/dancsecs/szbck/internal/purge"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/target"
 )
-
-const permToDelete = 0o0700
 
 func parseArguments(
 	args *szargs.Args,
@@ -122,10 +120,7 @@ func pruneDirectories(num int, dirs []string, dryRun string) error {
 		out.Print("Purging backup: " + dirs[i] + "\n")
 
 		if dryRun == "" {
-			err = os.Chmod(dirs[i], permToDelete)
-			if err == nil {
-				err = os.RemoveAll(dirs[i])
-			}
+			err = purge.Directory(dirs[i])
 		}
 	}
 

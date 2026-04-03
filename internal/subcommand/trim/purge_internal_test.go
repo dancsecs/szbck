@@ -20,11 +20,13 @@ package trim
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/dancsecs/szbck/internal/purge"
 	"github.com/dancsecs/szbck/internal/target"
 	"github.com/dancsecs/sztestlog"
 )
@@ -101,6 +103,9 @@ func TestInternalTrim_ProcessPurge_FailureAfterSuccess(t *testing.T) {
 	dirToDelete, err := trg.Create(startTime, permNoWrite)
 	chk.NoErr(err)
 
+	findPath, err := exec.LookPath("find")
+	chk.NoErr(err)
+
 	purgedCount, err := processPurge(
 		[]string{dirToDelete, "INVALID_DIR"},
 		[]time.Time{startTime, startTime},
@@ -110,11 +115,13 @@ func TestInternalTrim_ProcessPurge_FailureAfterSuccess(t *testing.T) {
 
 	chk.Err(
 		err,
-		""+
-			ErrPurgeFailed.Error()+
-			": chmod INVALID_DIR"+
-			": no such file or directory"+
-			"",
+		chk.ErrChain(
+			ErrPurgeFailed,
+			purge.ErrDirRights,
+			findPath,
+			"‘INVALID_DIR’",
+			"No such file or directory",
+		),
 	)
 	chk.Int(purgedCount, 1)
 

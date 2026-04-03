@@ -20,10 +20,10 @@ package trim
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/dancsecs/szbck/internal/out"
+	"github.com/dancsecs/szbck/internal/purge"
 )
 
 func processPurge(
@@ -36,10 +36,7 @@ func processPurge(
 
 	for i, dir := range dirs {
 		if dryRun == "" && remove[i] {
-			err = os.Chmod(dir, permToDelete)
-			if err == nil {
-				err = os.RemoveAll(dir)
-			}
+			err = purge.Directory(dir)
 
 			if err == nil {
 				purgedCount++

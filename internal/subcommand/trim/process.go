@@ -31,8 +31,6 @@ import (
 	"github.com/dancsecs/szbck/internal/target"
 )
 
-const permToDelete = 0o0700
-
 func parseArguments(args *szargs.Args) (*settings.Config, string, error) {
 	var (
 		isDryRun bool
