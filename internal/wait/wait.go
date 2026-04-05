@@ -28,17 +28,60 @@ const clearLine = "                    "
 
 // NextHourAt returns the time adjusted to the atMin time after the hour.
 func NextHourAt(atMin int, from time.Time) time.Time {
-	nextStartAt := time.Date(
+	next := time.Date(
 		from.Year(), from.Month(), from.Day(),
 		from.Hour(), atMin, 0, 0,
 		from.Location(),
 	)
 
-	for !nextStartAt.After(from) {
-		nextStartAt = nextStartAt.Add(time.Hour)
+	for !next.After(from) {
+		next = next.Add(time.Hour)
 	}
 
-	return nextStartAt
+	return next
+}
+
+// NextMinuteIn returns the duration until the start of the next minute.
+func nextMinuteIn(from time.Time) time.Duration {
+	next := time.Date(
+		from.Year(), from.Month(), from.Day(),
+		from.Hour(), from.Minute(), 0, 0,
+		from.Location(),
+	)
+
+	for !next.After(from) {
+		next = next.Add(time.Minute)
+	}
+
+	return next.Sub(from)
+}
+
+// NextSecondIn returns the duration until the start of the next second.
+func nextSecondIn(from time.Time) time.Duration {
+	next := time.Date(
+		from.Year(), from.Month(), from.Day(),
+		from.Hour(), from.Minute(), from.Second(), 0,
+		from.Location(),
+	)
+
+	for !next.After(from) {
+		next = next.Add(time.Second)
+	}
+
+	return next.Sub(from)
+}
+
+func chkIn(from time.Time, maxDur time.Duration) time.Duration {
+	switch {
+	case maxDur <= time.Nanosecond:
+		return time.Nanosecond
+	case maxDur <= time.Second:
+		return maxDur
+	case maxDur <= time.Minute+time.Minute:
+		return nextSecondIn(from)
+	default:
+		return nextMinuteIn(from)
+	}
 }
 
 // Until waits (sleeps) until the specified time displaying an updated
@@ -53,35 +96,26 @@ func Until(title string, monitor bool, targetTime time.Time) {
 		return
 	}
 
+	szlog.Say0f(
+		"Starting '%s' at %s in: %v%s\r",
+		title,
+		targetTimeStr,
+		maxSleep.Truncate(time.Second),
+		clearLine,
+	)
+
 	for maxSleep > 0 {
-		if !monitor {
-			szlog.Say1f(
-				"Starting '%s' at %s in: %v%s\n",
-				title,
-				targetTimeStr,
-				maxSleep,
-				clearLine,
-			)
-			time.Sleep(maxSleep)
-		} else {
+		if monitor {
 			szlog.Say0f(
 				"Starting '%s' at %s in: %v%s\r",
 				title,
 				targetTimeStr,
-				maxSleep,
+				maxSleep.Truncate(time.Second),
 				clearLine,
 			)
-
-			switch {
-			case maxSleep < time.Second:
-				time.Sleep(maxSleep)
-			case maxSleep < time.Second*10:
-				time.Sleep(time.Second)
-			default:
-				time.Sleep(time.Second * 5) //nolint:mnd // 5 second default.
-			}
 		}
 
+		time.Sleep(chkIn(now, maxSleep))
 		now = time.Now()
 		maxSleep = targetTime.Sub(now)
 	}
@@ -89,7 +123,7 @@ func Until(title string, monitor bool, targetTime time.Time) {
 	now = time.Now()
 	if monitor {
 		szlog.Say0f(
-			"Restarted '%s' at: %s TargetDelta: %v%s\n",
+			"\nRestarted '%s' at: %s TargetDelta: %v%s\n",
 			title,
 			now.Format("2006-01-02 15:04:05.999"),
 			now.Sub(targetTime),

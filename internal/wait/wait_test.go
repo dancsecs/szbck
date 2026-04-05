@@ -19,6 +19,7 @@
 package wait_test
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -82,9 +83,9 @@ func TestSnapshotProcess_WaitTill(t *testing.T) {
 
 	chk.AddSub(`\-?\d[\d\,\.]*(?:s|ms|µs|ns)?`, "#")
 	chk.Stdout(
-		"Starting 'Timer Title (500ms)' at ### #:#:# in: #"+
-			clearLine,
-		"Restarted 'Timer Title (500ms)' at: ### #:#:# TargetDelta: #"+
+		"Starting 'Timer Title (500ms)' at ### #:#:# in: #" +
+			clearLine + "\r" +
+			"Restarted 'Timer Title (500ms)' at: ### #:#:# TargetDelta: #" +
 			clearLine,
 	)
 }
@@ -93,19 +94,26 @@ func TestSnapshotProcess_WaitTillMonitor(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	wait.Until("Timer Title", true, time.Now().Add(time.Second*11))
+	startTime := time.Now()
+	wait.Until(
+		"Timer Title",
+		true,
+		time.Now().Add(time.Second+time.Millisecond*50))
+
+	numberOfMessages := 3
+
+	if time.Since(startTime) > time.Second*2 {
+		numberOfMessages++
+	}
 
 	chk.AddSub(`\-?\d[\d\,\.]*(?:s|ms|µs|ns)?`, "#")
 	chk.Stdout(
-		"" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Starting 'Timer Title' at ### #:#:# in: #" + clearLine + "\r" +
-			"Restarted 'Timer Title' at: ### #:#:# TargetDelta: #" +
+		""+
+			strings.Repeat(
+				"Starting 'Timer Title' at ### #:#:# in: #"+clearLine+"\r",
+				numberOfMessages,
+			),
+		"Restarted 'Timer Title' at: ### #:#:# TargetDelta: #"+
 			clearLine,
 	)
 }
