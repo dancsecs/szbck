@@ -135,7 +135,7 @@ func (a *StatFS) Delta() string {
 			out.Int(deltaBytes),
 			out.Pct(float64(deltaBytes)/float64(a.totalBytes)),
 			out.Int(deltaINodes),
-			out.Pct(float64(deltaINodes)/float64(a.totalBytes)),
+			out.Pct(float64(deltaINodes)/float64(a.totalINodes)),
 		),
 	)
 }
