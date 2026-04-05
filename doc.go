@@ -1,10 +1,10 @@
-<!---             *****  AUTO GENERATED:  DO NOT MODIFY  ***** -->
-<!---                   MODIFY TEMPLATE: '.README.gtm.md' -->
-<!---               See: 'https://github.com/dancsecs/gotomd' -->
+//                *****  AUTO GENERATED:  DO NOT MODIFY  *****.
+//                       MODIFY TEMPLATE: '.doc.gtm.go'.
+//                  See: 'https://github.com/dancsecs/gotomd'.
 
-<!---
-   Golang rsync backup utility wrapper: szbck.
-   Copyright (C) 2025 Leslie Dancsecs
+/*
+   Golang To Github Markdown Utility: gotomd
+   Copyright (C) 2023-2026 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,14 +18,9 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
+*/
 
-# Szerszam Backup Utility
-
-```go
-package main
-```
-
+/*
 Package szbck wraps the system's rsync utility to create time machine like
 backups. It is driven by a backup configuration file which identifies the root
 directory to backup, a target directory to store snapshots, as well as
@@ -50,6 +45,7 @@ functions as follows:
                 --at and --monitor can be provided in --daemon mode to specify
                 the minute after the hour to run (defaults to the start time
                 minute) and if a countdown should be displayed.
+
 
     Restore     Restores/removes/replaces files in the source directory
                 identified by the backup configuration file honoring all
@@ -117,7 +113,7 @@ in the target directory.
       If daemon mode is enabled this specifies the minute after the hour the
       snapshot should start otherwise the current time's minute value will be
       used.  Valid values are between 0-59.  An unexpected argument error will
-      occur if specified without --daemon being specified.
+      occur if specified without --daemon being specified.  
 
    [--trim]
       Executes the retention policy as specified in the configuration file
@@ -242,3 +238,5 @@ life.
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
+*/
+package main
