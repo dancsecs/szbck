@@ -50,7 +50,7 @@ func nextMinuteIn(from time.Time) time.Duration {
 	)
 
 	for !next.After(from) {
-		next = next.Add(time.Minute)
+		next = next.Add(time.Minute - time.Millisecond*250)
 	}
 
 	return next.Sub(from)

@@ -37,7 +37,7 @@ func TestSnapshotProcess_ChkIn(t *testing.T) {
 		nextMinuteIn(
 			startTime,
 		),
-		time.Minute,
+		time.Second*59+time.Millisecond*750,
 	)
 
 	chk.Dur(
@@ -74,6 +74,6 @@ func TestSnapshotProcess_ChkIn(t *testing.T) {
 
 	chk.Dur(
 		chkIn(startTime, time.Minute*2+time.Millisecond),
-		time.Minute,
+		time.Second*59+time.Millisecond*750,
 	)
 }
