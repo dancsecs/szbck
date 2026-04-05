@@ -34,6 +34,21 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
+const (
+	squashFName  = "########_######.####" + target.BackupDirectoryExtension
+	summaryUsage = "" +
+		"                        Bytes" +
+		"                         INodes\n" +
+		" Totals:                    #" +
+		"                              #\n" +
+		" Before:                    # (     #%)" +
+		"                    # (     #%)\n" +
+		"  After:                    # (     #%)" +
+		"                    # (     #%)\n" +
+		"   Used:                    # (     #%)" +
+		"                    # (     #%)"
+)
+
 //nolint:goCheckNoGlobals // Ok.
 var (
 	rsyncCmd      string
@@ -80,6 +95,52 @@ func init() {
 	sunDec31_2023 = time.Date(
 		2023, time.December, 31, 12, 0, 0, 0, time.Local,
 	)
+}
+
+func squashNumbers(chk *sztest.Chk) {
+	// FileNames
+	chk.AddSub(`\d{8,8}_\d\d\d\d\d\d\.\d\d\d\d`, "########_######.####")
+
+	// Percentages.
+	chk.AddSub(`\((?:\-|\s|\d)\d\d\.\d\d\%\)`, "(     #%)")
+	chk.AddSub(`\(\s(?:\-|\s|\d)\d\.\d\d\%\)`, "(     #%)")
+
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                   #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "               #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d`, "           #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d`, "       #")
+	chk.AddSub(`\-\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\-\d\,\d\d\d`, "     #")
+	chk.AddSub(`\-\d\d\d`, "   #")
+	chk.AddSub(`\-\d\d`, "  #")
+	chk.AddSub(`\-\d`, " #")
+
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d`, "            #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d`, "        #")
+	chk.AddSub(`\d\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\d\d\,\d\d\d`, "     #")
+	chk.AddSub(`\d\,\d\d\d`, "    #")
+	chk.AddSub(`\d\d\d`, "  #")
+	chk.AddSub(`\d\d`, " #")
+	chk.AddSub(`\d`, "#")
 }
 
 func setupBackupConfig(chk *sztest.Chk) string {
@@ -295,15 +356,13 @@ func TestTrim_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
 		"trim successful (Purged: 0) (DRY RUN)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 	chk.Log()
@@ -331,15 +390,13 @@ func TestTrim_Process_TwoBackupDirs_PurgeNoneDryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Stdout(
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap1),
 		"Keeping snapshot (DRY RUN): "+fmtTS(snap2),
 		"trim successful (Purged: 0) (DRY RUN)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 	chk.Log()
@@ -364,15 +421,13 @@ func TestTrim_Process_TwoBackupDirs_PurgeNone(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Stdout(
 		"Keeping snapshot: "+fmtTS(snap1),
 		"Keeping snapshot: "+fmtTS(snap2),
 		"trim successful (Purged: 0)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 	chk.Log()
@@ -403,7 +458,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Stdout(
 		"*Purged snapshot: "+fmtTS(purge1)+" **",
 		"*Purged snapshot: "+fmtTS(purge2)+" **",
@@ -411,9 +466,7 @@ func TestTrim_Process_TwoBackupDirs_PurgeDaily(t *testing.T) {
 		"Keeping snapshot: "+fmtTS(keepRoot),
 		"trim successful (Purged: 2)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 	chk.Log()

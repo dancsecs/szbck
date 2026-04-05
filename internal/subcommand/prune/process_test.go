@@ -34,6 +34,20 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
+const (
+	summaryUsage = "" +
+		"                        Bytes" +
+		"                         INodes\n" +
+		" Totals:                    #" +
+		"                              #\n" +
+		" Before:                    # (     #%)" +
+		"                    # (     #%)\n" +
+		"  After:                    # (     #%)" +
+		"                    # (     #%)\n" +
+		"   Used:                    # (     #%)" +
+		"                    # (     #%)"
+)
+
 //nolint:goCheckNoGlobals // Ok.
 var (
 	rsyncCmd string
@@ -50,6 +64,46 @@ func init() {
 	}
 
 	rootTime = time.Date(2025, time.May, 2, 3, 4, 5, 678900000, time.Local)
+}
+
+func squashNumbers(chk *sztest.Chk) {
+	chk.AddSub(`\((?:\-|\s|\d)\d\d\.\d\d\%\)`, "(     #%)")
+	chk.AddSub(`\(\s(?:\-|\s|\d)\d\.\d\d\%\)`, "(     #%)")
+
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                   #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "               #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d`, "           #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d`, "       #")
+	chk.AddSub(`\-\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\-\d\,\d\d\d`, "     #")
+	chk.AddSub(`\-\d\d\d`, "   #")
+	chk.AddSub(`\-\d\d`, "  #")
+	chk.AddSub(`\-\d`, " #")
+
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d`, "            #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d`, "        #")
+	chk.AddSub(`\d\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\d\d\,\d\d\d`, "     #")
+	chk.AddSub(`\d\,\d\d\d`, "    #")
+	chk.AddSub(`\d`, "#")
 }
 
 func setupBackupConfig(chk *sztest.Chk) string {
@@ -200,7 +254,7 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Purging oldest backup (DRY RUN)",
@@ -208,9 +262,7 @@ func TestPrune_Process_TwoBackupDirs_DryRun(t *testing.T) {
 		"Purging backup: "+dirToDelete,
 		"prune successful (DRY RUN)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 }
@@ -230,7 +282,7 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Purging oldest backup",
@@ -238,9 +290,7 @@ func TestPrune_Process_TwoBackupDirs_DefaultOne(t *testing.T) {
 		"Purging backup: "+dirToDelete,
 		"prune successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 }
@@ -261,7 +311,7 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Purging oldest backup",
@@ -269,9 +319,7 @@ func TestPrune_Process_ThreeBackupDirs_DefaultOne(t *testing.T) {
 		"Purging backup: "+dirToDelete,
 		"prune successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 }
@@ -295,7 +343,7 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Purging 2 oldest backups",
@@ -304,9 +352,7 @@ func TestPrune_Process_TwoBackupDirs_All(t *testing.T) {
 		"Purging backup: "+dirToDelete2,
 		"prune successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 }
@@ -362,7 +408,7 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Purging 2 oldest backups",
@@ -371,9 +417,7 @@ func TestPrune_Process_TwoBackupDirs_TooMany(t *testing.T) {
 		"Purging backup: "+dirToDelete2,
 		"prune successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 	chk.Stderr()
 }

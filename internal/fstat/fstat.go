@@ -20,6 +20,7 @@ package fstat
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dancsecs/szbck/internal/out"
 	"golang.org/x/sys/unix"
@@ -58,14 +59,58 @@ func New(path string) (*StatFS, error) {
 	return nil, fmt.Errorf("statfs failed: %w", err)
 }
 
-// Status returns a string representing the file system usage.
-func (a *StatFS) Status() string {
-	return fmt.Sprintf(
-		"Total: %s Avail: %s (%s) INodes: %s Avail: %s (%s)",
-		out.Uint(a.totalBytes),
+func balancePct(pct string) string {
+	if pct == "" {
+		return ""
+	}
+
+	return fmt.Sprintf("(%7s)", pct)
+}
+
+func report(
+	name, byteSize, bytePercent, iNode, iNodePct string,
+) string {
+	return strings.TrimRight(
+		fmt.Sprintf(
+			"%8s %20s %9s %20s %9s",
+			name,
+			byteSize,
+			balancePct(bytePercent),
+			iNode,
+			balancePct(iNodePct),
+		),
+		" ",
+	)
+}
+
+// TotalStatus returns a string representing the file system total bytes and
+// iNodes.
+func (a *StatFS) TotalStatus() string {
+	return fmt.Sprint(
+		report(
+			"",
+			"Bytes",
+			"",
+			"INodes",
+			"",
+		),
+		"\n",
+		report(
+			"Totals:",
+			out.Uint(a.totalBytes),
+			"",
+			out.Uint(a.totalINodes),
+			"",
+		),
+	)
+}
+
+// FreeStatus returns a string representing the file system usage.
+func (a *StatFS) FreeStatus(title string) string {
+	return report(
+		title+":",
 		out.Uint(a.freeBytes),
 		out.Pct(float64(a.freeBytes)/float64(a.totalBytes)),
-		out.Uint(a.totalINodes),
 		out.Uint(a.freeINodes),
 		out.Pct(float64(a.freeINodes)/float64(a.totalINodes)),
 	)
@@ -81,12 +126,16 @@ func (a *StatFS) Delta() string {
 	deltaINodes := int64(a.freeINodes - deltaStatFS.freeINodes)
 
 	return fmt.Sprintf(
-		"Before: %s\n After: %s\nDeltas: Bytes: %s (%s) INodes: %s (%s)",
-		a.Status(),
-		deltaStatFS.Status(),
-		out.Int(deltaBytes),
-		out.Pct(float64(deltaBytes)/float64(a.totalBytes)),
-		out.Int(deltaINodes),
-		out.Pct(float64(deltaINodes)/float64(a.totalBytes)),
+		"%s\n%s\n%s\n%s",
+		a.TotalStatus(),
+		a.FreeStatus("Before"),
+		deltaStatFS.FreeStatus(" After"),
+		report(
+			"Used:",
+			out.Int(deltaBytes),
+			out.Pct(float64(deltaBytes)/float64(a.totalBytes)),
+			out.Int(deltaINodes),
+			out.Pct(float64(deltaINodes)/float64(a.totalBytes)),
+		),
 	)
 }

@@ -34,6 +34,21 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
+const (
+	squashFName  = "########_######.####" + target.BackupDirectoryExtension
+	summaryUsage = "" +
+		"                        Bytes" +
+		"                         INodes\n" +
+		" Totals:                    #" +
+		"                              #\n" +
+		" Before:                    # (     #%)" +
+		"                    # (     #%)\n" +
+		"  After:                    # (     #%)" +
+		"                    # (     #%)\n" +
+		"   Used:                    # (     #%)" +
+		"                    # (     #%)"
+)
+
 const basicOptions = "" +
 	" " + "--archive" +
 	" " + "--quiet" +
@@ -58,6 +73,52 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func squashNumbers(chk *sztest.Chk) {
+	// FileNames
+	chk.AddSub(`\d{8,8}_\d\d\d\d\d\d\.\d\d\d\d`, "########_######.####")
+
+	// Percentages.
+	chk.AddSub(`\((?:\-|\s|\d)\d\d\.\d\d\%\)`, "(     #%)")
+	chk.AddSub(`\(\s(?:\-|\s|\d)\d\.\d\d\%\)`, "(     #%)")
+
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                   #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "               #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d`, "           #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d`, "       #")
+	chk.AddSub(`\-\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\-\d\,\d\d\d`, "     #")
+	chk.AddSub(`\-\d\d\d`, "   #")
+	chk.AddSub(`\-\d\d`, "  #")
+	chk.AddSub(`\-\d`, " #")
+
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d`, "            #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d`, "        #")
+	chk.AddSub(`\d\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\d\d\,\d\d\d`, "     #")
+	chk.AddSub(`\d\,\d\d\d`, "    #")
+	chk.AddSub(`\d\d\d`, "  #")
+	chk.AddSub(`\d\d`, " #")
+	chk.AddSub(`\d`, "#")
 }
 
 func setupBackupConfig(chk *sztest.Chk) (string, string) {
@@ -122,7 +183,7 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 
 	chk.Stdout(
@@ -130,12 +191,10 @@ func TestSnapshotProcess_NoFiles(t *testing.T) {
 			rsyncCmd+basicOptions+
 			" "+"--delete"+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 }
 
@@ -156,7 +215,7 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Running command: "+
@@ -164,12 +223,10 @@ func TestSnapshotProcess_DryRun(t *testing.T) {
 			" "+rsync.FlgDelete+
 			" "+rsync.FlgDryRun+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful (DRY RUN)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 }
 
@@ -192,31 +249,27 @@ func TestSnapshotProcess_OneFile(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
 			" "+rsync.FlgLinkDest+
 			filepath.Join(trg, target.LatestDirectoryLink)+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 }
 
@@ -241,31 +294,27 @@ func TestSnapshotProcess_TwoFiles(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
 			" "+rsync.FlgLinkDest+
 			filepath.Join(trg, target.LatestDirectoryLink)+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 }
 
@@ -293,18 +342,16 @@ func TestSnapshotProcess_Trim(t *testing.T) {
 	// )
 	chk.Str(outText, "")
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
 	chk.Log()
 	chk.Stdout(
 		"Running command: "+
 			rsyncCmd+basicOptions+
 			" "+rsync.FlgDelete+
 			" "+source+
-			" "+filepath.Join(trg, "#_#.#"+target.BackupDirectoryExtension),
+			" "+filepath.Join(trg, squashFName),
 		"snapshot successful (Purged: 0)",
 		"Syncing...",
-		"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-		"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
+		summaryUsage,
 	)
 }

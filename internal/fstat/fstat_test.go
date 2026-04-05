@@ -23,8 +23,49 @@ import (
 	"testing"
 
 	"github.com/dancsecs/szbck/internal/fstat"
+	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
+
+func squashNumbers(chk *sztest.Chk) {
+	chk.AddSub(`(?:\-|\s)\(\d\d\.\d\d\%\)`, "(  #.##%)")
+	chk.AddSub(`(?:\-|\s)\(\s\d\.\d\d\%\)`, "(  #.##%)")
+
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                   #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "               #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d\,\d\d\d`, "           #")
+	chk.AddSub(`\-\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\-\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\-\d\d\d\,\d\d\d`, "       #")
+	chk.AddSub(`\-\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\-\d\,\d\d\d`, "     #")
+	chk.AddSub(`\-\d\d\d`, "   #")
+	chk.AddSub(`\-\d\d`, "  #")
+	chk.AddSub(`\-\d`, " #")
+
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`,
+		"                    #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                  #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                 #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "                #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "              #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d\,\d\d\d`, "             #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d\,\d\d\d`, "            #")
+	chk.AddSub(`\d\d\d\,\d\d\d\,\d\d\d`, "          #")
+	chk.AddSub(`\d\d\,\d\d\d\,\d\d\d`, "         #")
+	chk.AddSub(`\d\,\d\d\d\,\d\d\d`, "        #")
+	chk.AddSub(`\d\d\d\,\d\d\d`, "      #")
+	chk.AddSub(`\d\d\,\d\d\d`, "     #")
+	chk.AddSub(`\d\,\d\d\d`, "    #")
+	chk.AddSub(`\d`, "#")
+}
 
 func TestStatfs_InvalidDirectory(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
@@ -53,21 +94,39 @@ func TestStatfs_Tmp(t *testing.T) {
 	chk.NoErr(err)
 	chk.NotNil(statfs)
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
+	squashNumbers(chk)
+
+	chk.StrSlice(
+		strings.Split(statfs.TotalStatus(), "\n"),
+		[]string{
+			"                        Bytes                         INodes",
+			" Totals:" +
+				"        6,208,622,592                      1,048,576",
+		},
+	)
 
 	chk.Str(
-		statfs.Status(),
-		"Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
+		statfs.FreeStatus("Before"),
+		" Before:"+
+			"        6,201,356,288 ( 99.88%)            1,048,325 ( 99.98%)",
 	)
 
 	_ = chk.CreateTmpFile([]byte("string"))
 
+	exp := []string{
+		"                        Bytes                         INodes",
+		" Totals:" +
+			"        6,208,622,592                      1,048,576",
+		" Before:" +
+			"        6,201,356,288 ( 99.88%)            1,048,325 ( 99.98%)",
+		"  After:" +
+			"        6,201,356,288 ( 99.88%)            1,048,325 ( 99.98%)",
+		"   Used:" +
+			"                6,288 (  9.88%)                    5 (  9.98%)",
+	}
+
 	chk.StrSlice(
 		strings.Split(statfs.Delta(), "\n"),
-		[]string{
-			"Before: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-			" After: Total: # Avail: # (#.#%) INodes: # Avail: # (#.#%)",
-			"Deltas: Bytes: # (#.#%) INodes: # (#.#%)",
-		},
+		exp,
 	)
 }
