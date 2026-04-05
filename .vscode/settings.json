@@ -46,6 +46,7 @@
         "metalinter",
         "nestif",
         "nolint",
+        "nolintlint",
         "nosnakecase",
         "paralleltest",
         "rgba",

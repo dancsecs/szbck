@@ -16,6 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+//nolint:gofumpt,lll,nolintlint // Ok.
 /*
 Package szbck wraps the system's rsync utility to create time machine like
 backups. It is driven by a backup configuration file which identifies the root
@@ -97,4 +98,6 @@ life.
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
 */
+//
+//nolint:gofumpt,lll
 package main
