@@ -98,7 +98,7 @@ Create generates a new Szerszam backup configuration file.
     source
         Specifies the root directory to back up.
 
-{s | snap | snapshot} [--dry-run] [--daemon [--at minute]] [--trim] [-t target] config.szb
+{s | snap | snapshot} [--dry-run] [--daemon [--at minute] [--monitor]] [--trim] [-t target] config.szb
 
 Create a new snapshot of the source listed in the configuration file located
 in the target directory.
@@ -114,7 +114,11 @@ in the target directory.
       If daemon mode is enabled this specifies the minute after the hour the
       snapshot should start otherwise the current time's minute value will be
       used.  Valid values are between 0-59.  An unexpected argument error will
-      occur if specified without --daemon being specified.  
+      occur if specified without --daemon being specified.
+
+   [--monitor]
+      If daemon mode is enabled then a countdown until the next backup is
+      displayed.  By minute, then by second for the last minute.
 
    [--trim]
       Executes the retention policy as specified in the configuration file
@@ -240,6 +244,5 @@ life.
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
 */
-//
-//nolint:gofumpt,lll
 package main
+
