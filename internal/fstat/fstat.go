@@ -72,7 +72,7 @@ func report(
 ) string {
 	return strings.TrimRight(
 		fmt.Sprintf(
-			"%8s %20s %9s %20s %9s",
+			"%13s %20s %9s %20s %9s",
 			name,
 			byteSize,
 			balancePct(bytePercent),
@@ -96,7 +96,7 @@ func (a *StatFS) TotalStatus() string {
 		),
 		"\n",
 		report(
-			"Totals:",
+			"Capacity:",
 			out.Uint(a.totalBytes),
 			"",
 			out.Uint(a.totalINodes),
@@ -108,7 +108,7 @@ func (a *StatFS) TotalStatus() string {
 // FreeStatus returns a string representing the file system usage.
 func (a *StatFS) FreeStatus(title string) string {
 	return report(
-		title+":",
+		"Free "+title+":",
 		out.Uint(a.freeBytes),
 		out.Pct(float64(a.freeBytes)/float64(a.totalBytes)),
 		out.Uint(a.freeINodes),
@@ -129,9 +129,9 @@ func (a *StatFS) Delta() string {
 		"%s\n%s\n%s\n%s",
 		a.TotalStatus(),
 		a.FreeStatus("Before"),
-		deltaStatFS.FreeStatus(" After"),
+		deltaStatFS.FreeStatus("After"),
 		report(
-			"Used:",
+			"Delta:",
 			out.Int(deltaBytes),
 			out.Pct(float64(deltaBytes)/float64(a.totalBytes)),
 			out.Int(deltaINodes),

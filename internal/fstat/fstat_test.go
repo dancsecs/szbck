@@ -99,29 +99,30 @@ func TestStatfs_Tmp(t *testing.T) {
 	chk.StrSlice(
 		strings.Split(statfs.TotalStatus(), "\n"),
 		[]string{
-			"                        Bytes                         INodes",
-			" Totals:" +
+			"      " +
+				"                       Bytes                         INodes",
+			"    Capacity:" +
 				"        6,208,622,592                      1,048,576",
 		},
 	)
 
 	chk.Str(
 		statfs.FreeStatus("Before"),
-		" Before:"+
+		" Free Before:"+
 			"        6,201,356,288 ( 99.88%)            1,048,325 ( 99.98%)",
 	)
 
 	_ = chk.CreateTmpFile([]byte("string"))
 
 	exp := []string{
-		"                        Bytes                         INodes",
-		" Totals:" +
+		"                             Bytes                         INodes",
+		"    Capacity:" +
 			"        6,208,622,592                      1,048,576",
-		" Before:" +
+		" Free Before:" +
 			"        6,201,356,288 ( 99.88%)            1,048,325 ( 99.98%)",
-		"  After:" +
+		"  Free After:" +
 			"        6,201,356,288 ( 99.88%)            1,048,325 ( 99.98%)",
-		"   Used:" +
+		"       Delta:" +
 			"                6,288 (  9.88%)                    5 (  9.98%)",
 	}
 

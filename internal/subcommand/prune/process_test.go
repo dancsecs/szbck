@@ -36,15 +36,15 @@ import (
 
 const (
 	summaryUsage = "" +
-		"                        Bytes" +
+		"                             Bytes" +
 		"                         INodes\n" +
-		" Totals:                    #" +
+		"    Capacity:                    #" +
 		"                              #\n" +
-		" Before:                    # (     #%)" +
+		" Free Before:                    # (     #%)" +
 		"                    # (     #%)\n" +
-		"  After:                    # (     #%)" +
+		"  Free After:                    # (     #%)" +
 		"                    # (     #%)\n" +
-		"   Used:                    # (     #%)" +
+		"       Delta:                    # (     #%)" +
 		"                    # (     #%)"
 )
 
