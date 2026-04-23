@@ -65,7 +65,7 @@ functions as follows:
 	Vet         Parses a backup configuration file identifying any errors
 				or problems without making any attempts at any operations.
 
-<!--- gotomd::inline-run::./. help -->
+<!--- gotomd::irun::./. help -->
 
 # Examples:
 
@@ -98,4 +98,5 @@ life.
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
 */
-package main
+package ////main
+
