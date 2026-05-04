@@ -268,20 +268,16 @@ func TestStatus_Process_OneEmptyBackupDir(t *testing.T) {
 			"Backup Sets: 1",
 			"Total Bytes: 8,216",
 			"",
-			filepath.Base(bkDir) + ": 4,096",
-			"",
 		},
 	)
 
 	chk.Stdout(
-		"Calculating size of dir: ("+trgDir+")...",
-		"... Calculated size of dir: ("+trgDir+") = #",
-		"Calculating size of dir: ("+bkDir+")...",
-		"... Calculated size of dir: ("+bkDir+") = #",
+		filepath.Base(bkDir) +
+			":                      # (                     #)",
 	)
 }
 
-func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
+func TestStatus_Process_TwoBackupDirsWithOneFileEach(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
@@ -291,6 +287,7 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 	bkDir1 := makeSnapshotDir(chk, trgDir, 0)
 	bkDir2 := makeSnapshotDir(chk, trgDir, 30)
 
+	_ = chk.CreateTmpFileIn(bkDir1, []byte("This is a file in dir 2"))
 	_ = chk.CreateTmpFileIn(bkDir2, []byte("This is a file in dir 2"))
 
 	args := szargs.New("", []string{"prg", "-t", trgDir, cfgFile})
@@ -306,18 +303,13 @@ func TestStatus_Process_TwoBackupDirsWithOneFile(t *testing.T) {
 			"Backup Sets: 2",
 			"Total Bytes: 12,335",
 			"",
-			filepath.Base(bkDir1) + ": 4,096",
-			filepath.Base(bkDir2) + ": 4,119",
-			"",
 		},
 	)
 
 	chk.Stdout(
-		"Calculating size of dir: ("+trgDir+")...",
-		"... Calculated size of dir: ("+trgDir+") = #",
-		"Calculating size of dir: ("+bkDir1+")...",
-		"... Calculated size of dir: ("+bkDir1+") = #",
-		"Calculating size of dir: ("+bkDir2+")...",
-		"... Calculated size of dir: ("+bkDir2+") = #",
+		filepath.Base(bkDir1)+
+			":                     # (                    #)",
+		filepath.Base(bkDir2)+
+			":                     # (                    #)",
 	)
 }

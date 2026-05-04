@@ -28,6 +28,7 @@ import (
 	"github.com/dancsecs/szbck/internal/out"
 	"github.com/dancsecs/szbck/internal/settings"
 	"github.com/dancsecs/szbck/internal/target"
+	"github.com/dancsecs/szlog"
 )
 
 func parseArguments(args *szargs.Args) (*settings.Config, error) {
@@ -63,38 +64,50 @@ func loadBackupDirs(trg string) ([]string, error) {
 }
 
 func buildReport(trg string) (string, error) {
+	const outFmt = "%s: %22s (%22s)\n"
+
 	var (
-		outStr    string
-		dirs      []string
-		totalSize int64
-		dirSize   int64
-		err       error
+		dirs        []string
+		prevDirSize int64
+		hardSize    int64
+		totalSize   int64
+		dirSize     int64
+		dirName     string
+		err         error
 	)
 
 	dirs, err = loadBackupDirs(trg)
+
+	if err == nil && len(dirs) > 0 {
+		dirName = filepath.Base(dirs[len(dirs)-1])
+		dirSize, err = du.Total(dirs[len(dirs)-1])
+	}
+
+	for i := len(dirs) - 1; i > 0 && err == nil; i-- {
+		prevDirSize, hardSize, err = du.Totals(dirs[i-1], dirs[i])
+		if err == nil {
+			szlog.Say0f(outFmt, dirName, out.Int(dirSize), out.Int(hardSize))
+
+			dirSize = prevDirSize
+			dirName = filepath.Base(dirs[i-1])
+		}
+	}
+
+	if err == nil && len(dirs) > 0 {
+		szlog.Say0f(outFmt, dirName, out.Int(dirSize), out.Int(dirSize))
+	}
 
 	if err == nil {
 		totalSize, err = du.Total(trg)
 	}
 
 	if err == nil {
-		outStr = fmt.Sprintf(
+		return fmt.Sprintf(
 			"Backup Sets: %s\n"+
-				"Total Bytes: %s\n\n",
+				"Total Bytes: %s\n",
 			out.Int(int64(len(dirs))),
 			out.Int(totalSize),
-		)
-	}
-
-	for i, mi := 0, len(dirs); i < mi && err == nil; i++ {
-		dirSize, err = du.Total(dirs[i])
-		if err == nil {
-			outStr += filepath.Base(dirs[i]) + ": " + out.Int(dirSize) + "\n"
-		}
-	}
-
-	if err == nil {
-		return outStr, nil
+		), nil
 	}
 
 	return "", fmt.Errorf("%w: %w", ErrReportFailed, err)
