@@ -25,7 +25,6 @@ import (
 	"strings"
 
 	"github.com/dancsecs/szbck/internal/directory"
-	"github.com/dancsecs/szlog"
 )
 
 // Total returns the total number of bytes used by the directory tree.
@@ -44,7 +43,6 @@ func Total(dir string) (int64, error) {
 	err = directory.Is(dir)
 
 	if err == nil {
-		szlog.Say1("Calculating size of dir: (", dir, ")...\n")
 		tmpStr, err = Run([]string{"-s", "-b", dir}, os.Stderr)
 	}
 
@@ -57,10 +55,61 @@ func Total(dir string) (int64, error) {
 	}
 
 	if err == nil {
-		szlog.Say1("... Calculated size of dir: (", dir, ") = ", total, "\n")
-
 		return total, nil
 	}
 
 	return 0, fmt.Errorf("%w: %w", ErrInvalid, err)
+}
+
+// Totals returns the total number of bytes used by the directory trees with
+// dir2 size accounting for hard links to dir1.
+func Totals(dir1, dir2 string) (int64, int64, error) {
+	const (
+		base = 10
+		bits = 64
+	)
+
+	var (
+		tmpStr  string
+		results []string
+		total1  int64
+		total2  int64
+		err     error
+	)
+
+	err = directory.Is(dir1)
+
+	if err == nil {
+		err = directory.Is(dir2)
+	}
+
+	if err == nil {
+		tmpStr, err = Run([]string{"-s", "-b", dir1, dir2}, os.Stderr)
+	}
+
+	if err == nil {
+		results = strings.Split(tmpStr, "\n")
+	}
+
+	if err == nil {
+		total1, err = strconv.ParseInt(
+			strings.Split(results[0], "\t")[0],
+			base,
+			bits,
+		)
+	}
+
+	if err == nil {
+		total2, err = strconv.ParseInt(
+			strings.Split(results[1], "\t")[0],
+			base,
+			bits,
+		)
+	}
+
+	if err == nil {
+		return total1, total2, nil
+	}
+
+	return 0, 0, fmt.Errorf("%w: %w", ErrInvalid, err)
 }

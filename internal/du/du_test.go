@@ -56,23 +56,17 @@ func TestDu_Total_InvalidDirectory(t *testing.T) {
 }
 
 func TestDu_Total_EmptyDirectory(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t, "-v")
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
 
 	_, err := du.Total(dir)
 	chk.NoErr(err)
-
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
-	chk.Stdout(
-		"Calculating size of dir: ("+dir+")...",
-		"... Calculated size of dir: ("+dir+") = #",
-	)
 }
 
 func TestDu_Total_OneFile(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t, "-v")
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -80,10 +74,88 @@ func TestDu_Total_OneFile(t *testing.T) {
 
 	_, err := du.Total(dir)
 	chk.NoErr(err)
+}
 
-	chk.AddSub(`\-?\d[\d\,]*`, "#")
-	chk.Stdout(
-		"Calculating size of dir: ("+dir+")...",
-		"... Calculated size of dir: ("+dir+") = #",
+func TestDu_Total_InvalidDirectories(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	size1, size2, err := du.Totals("", "")
+	chk.Err(
+		err,
+		""+
+			du.ErrInvalid.Error()+
+			": "+
+			directory.ErrInvalid.Error()+
+			": ''"+
+			"",
 	)
+	chk.Int64(size1, 0)
+	chk.Int64(size2, 0)
+
+	size1, size2, err = du.Totals("DOES_NOT_EXIST", "")
+	chk.Err(
+		err,
+		""+
+			du.ErrInvalid.Error()+
+			": "+
+			directory.ErrInvalid.Error()+
+			": 'DOES_NOT_EXIST'"+
+			"",
+	)
+	chk.Int64(size1, 0)
+	chk.Int64(size2, 0)
+
+	goodDir := chk.CreateTmpDir()
+
+	size1, size2, err = du.Totals(goodDir, "")
+	chk.Err(
+		err,
+		""+
+			du.ErrInvalid.Error()+
+			": "+
+			directory.ErrInvalid.Error()+
+			": ''"+
+			"",
+	)
+	chk.Int64(size1, 0)
+	chk.Int64(size2, 0)
+
+	size1, size2, err = du.Totals(goodDir, "DOES_NOT_EXIST")
+	chk.Err(
+		err,
+		""+
+			du.ErrInvalid.Error()+
+			": "+
+			directory.ErrInvalid.Error()+
+			": 'DOES_NOT_EXIST'"+
+			"",
+	)
+	chk.Int64(size1, 0)
+	chk.Int64(size2, 0)
+}
+
+func TestDu_Total_EmptyDirectories(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	dir1 := chk.CreateTmpSubDir("A")
+	dir2 := chk.CreateTmpSubDir("B")
+
+	_, _, err := du.Totals(dir1, dir2)
+	chk.NoErr(err)
+}
+
+func TestDu_Total_OneFile_OneFile(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	dir1 := chk.CreateTmpSubDir("A")
+	_ = chk.CreateTmpFileIn(dir1, []byte("sample file"))
+
+	dir2 := chk.CreateTmpSubDir("B")
+	_ = chk.CreateTmpFileIn(dir2, []byte("sample file"))
+
+	_, _, err := du.Totals(dir1, dir2)
+	chk.NoErr(err)
 }
